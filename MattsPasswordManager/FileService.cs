@@ -27,11 +27,19 @@ namespace MattsPasswordManager
             }
         }
 
-        public static void SavePasswordFile(string filePath)
+        public static void SavePasswordFile(string filePath, List<Entry> entries)
         {
-            Console.WriteLine("Saving password file...");
+            // Convert to JSON
+            string jsonString = JsonSerializer.Serialize(entries);
 
-            Console.WriteLine("Finished saving!");
+            try
+            {
+                File.WriteAllText(filePath, jsonString);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error saving file!");
+            }
         }
     }
 }

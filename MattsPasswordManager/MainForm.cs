@@ -5,6 +5,10 @@ namespace MattsPasswordManager
 {
     public partial class MainForm : Form
     {
+        public static readonly string FILE_EXT_FILTER = "MPM Files (*.mpm)|*.mpm";
+
+        private string _openFilePath = "";
+
         public MainForm()
         {
             InitializeComponent();
@@ -14,23 +18,29 @@ namespace MattsPasswordManager
         {
             // Get filename
             OpenFileDialog openFileDialog =
-                new() { Filter = "MPM Files (*.mpm)|*.mpm", Title = "Select a file" };
+                new() { Filter = FILE_EXT_FILTER, Title = "Select a file" };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 // Clear the table
                 passwordTable.Rows.Clear();
 
-                string filePath = openFileDialog.FileName;
+                string filePath = this._openFilePath = openFileDialog.FileName;
 
                 List<Entry> data;
                 try
                 {
                     data = FileService.LoadPasswordFile(filePath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    MessageBox.Show(this, "Error opening file!", "Error");
+                    MessageBox.Show(
+                        this,
+                        ex.Message,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
 
                     return;
                 }
@@ -44,7 +54,55 @@ namespace MattsPasswordManager
 
         private void FileSaveClickHandler(object sender, EventArgs e)
         {
-            MessageBox.Show(this, "Clicked save!");
+            // Convert all the table entrys to Entry objects
+            List<Entry> entries = [];
+
+            for (int i = 0; i < passwordTable.Rows.Count; i++)
+            {
+                DataGridViewRow row = passwordTable.Rows[i];
+
+                string description = row.Cells[0].Value.ToString() ?? "";
+                string username = row.Cells[1].Value.ToString() ?? "";
+                string password = row.Cells[1].Value.ToString() ?? "";
+
+                Entry entry =
+                    new()
+                    {
+                        Description = description,
+                        Username = username,
+                        Password = password
+                    };
+
+                entries.Add(entry);
+            }
+
+            if (this._openFilePath == "")
+            {
+                SaveFileDialog saveFileDialog =
+                    new() { Filter = FILE_EXT_FILTER, Title = "Save a file" };
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                this._openFilePath = saveFileDialog.FileName;
+            }
+
+            try
+            {
+                FileService.SavePasswordFile(this._openFilePath, entries);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    this,
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         private void AddEntryClickHandler(object sender, EventArgs e)
@@ -75,7 +133,19 @@ namespace MattsPasswordManager
                 return;
             }
 
-            passwordTable.Rows.RemoveAt(selectedRow.Index);
+            // Confirm delete
+            DialogResult result = MessageBox.Show(
+                this,
+                "Are you sure you want to remove this entry?",
+                "Confirmation",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+            {
+                passwordTable.Rows.RemoveAt(selectedRow.Index);
+            }
         }
 
         private void AddEntryToTable(Entry entry)
