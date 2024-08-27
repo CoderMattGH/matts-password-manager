@@ -50,8 +50,10 @@
             passwordTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             passwordTable.Columns.AddRange(new DataGridViewColumn[] { Description, Username, Password });
             passwordTable.Location = new Point(0, 27);
+            passwordTable.MultiSelect = false;
             passwordTable.Name = "passwordTable";
             passwordTable.ReadOnly = true;
+            passwordTable.SelectionMode = DataGridViewSelectionMode.CellSelect;
             passwordTable.Size = new Size(943, 625);
             passwordTable.TabIndex = 0;
             // 
@@ -100,6 +102,7 @@
             removeButton.TabIndex = 2;
             removeButton.Text = "Remove";
             removeButton.UseVisualStyleBackColor = true;
+            removeButton.Click += RemoveEntryClickHandler;
             // 
             // editButton
             // 
@@ -129,21 +132,21 @@
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(180, 22);
+            loadToolStripMenuItem.Size = new Size(100, 22);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += FileLoadClickHandler;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(180, 22);
+            saveToolStripMenuItem.Size = new Size(100, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += FileSaveClickHandler;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(100, 22);
             exitToolStripMenuItem.Text = "Exit";
             // 
             // actionsToolStripMenuItem

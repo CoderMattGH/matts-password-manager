@@ -52,20 +52,30 @@ namespace MattsPasswordManager
             Entry entry = new();
             AddEntryForm addEntryForm = new(entry);
 
-            // TODO: Add entry
             if (addEntryForm.ShowDialog() == DialogResult.OK)
             {
-                // Add entry
                 AddEntryToTable(entry);
+            }
+        }
 
+        private void RemoveEntryClickHandler(object sender, EventArgs e)
+        {
+            DataGridViewRow selectedRow = passwordTable.CurrentRow;
+
+            if (selectedRow == null)
+            {
                 MessageBox.Show(
                     this,
-                    "Entry added!",
-                    "Message",
+                    "No row selected!",
+                    "Error",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
+                    MessageBoxIcon.Error
                 );
+
+                return;
             }
+
+            passwordTable.Rows.RemoveAt(selectedRow.Index);
         }
 
         private void AddEntryToTable(Entry entry)
