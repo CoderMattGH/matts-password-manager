@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace MattsPasswordManager.DTOs
 {
-    public class Entry
+    internal class ValidationObj
     {
-        public string? Description { get; set; }
-        public string? Username { get; set; }
-        public string? Password { get; set; }
+        public required string Message { get; set; }
+        public required Boolean IsValid { get; set; }
     }
 }

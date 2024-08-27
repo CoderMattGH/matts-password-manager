@@ -12,8 +12,6 @@ namespace MattsPasswordManager
     {
         public static List<Entry> LoadPasswordFile(string filePath)
         {
-            MessageBox.Show($"Loading File: {filePath}");
-
             try
             {
                 string content = File.ReadAllText(filePath);

@@ -90,6 +90,7 @@
             addButton.TabIndex = 1;
             addButton.Text = "Add";
             addButton.UseVisualStyleBackColor = true;
+            addButton.Click += AddEntryClickHandler;
             // 
             // removeButton
             // 
