@@ -236,7 +236,12 @@ namespace MattsPasswordManager.Forms
             if (this._openFilePath == "" || forceSaveToNewFile)
             {
                 SaveFileDialog saveFileDialog =
-                    new() { Filter = FILE_EXT_FILTER, Title = "Save a file" };
+                    new()
+                    {
+                        Filter = FILE_EXT_FILTER,
+                        Title = "Save a file",
+                        OverwritePrompt = true
+                    };
 
                 if (saveFileDialog.ShowDialog() != DialogResult.OK)
                 {
