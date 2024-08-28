@@ -136,7 +136,7 @@ namespace MattsPasswordManager.Forms
             {
                 MessageBox.Show(
                     this,
-                    "No rows selected!",
+                    "No row selected!",
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
@@ -202,6 +202,11 @@ namespace MattsPasswordManager.Forms
                 passwordTable.Rows.RemoveAt(selectedRow.Index);
                 _isModified = true;
             }
+        }
+
+        private void AboutVersionClickHandler(object sender, EventArgs e)
+        {
+            new VersionForm().ShowDialog();
         }
 
         private void AddEntryToTable(Entry entry)

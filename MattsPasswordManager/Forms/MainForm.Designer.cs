@@ -192,6 +192,7 @@
             versionToolStripMenuItem.Name = "versionToolStripMenuItem";
             versionToolStripMenuItem.Size = new Size(180, 22);
             versionToolStripMenuItem.Text = "Version";
+            versionToolStripMenuItem.Click += AboutVersionClickHandler;
             // 
             // MainForm
             // 
