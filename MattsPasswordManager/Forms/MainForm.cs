@@ -21,6 +21,7 @@ namespace MattsPasswordManager.Forms
         {
             _openFilePath = "";
             _isModified = false;
+            _encPassword = "";
             passwordTable.Rows.Clear();
         }
 
@@ -114,6 +115,19 @@ namespace MattsPasswordManager.Forms
                     MessageBoxIcon.Error
                 );
             }
+        }
+
+        private void ActionChangeRepoPasswordClickHandler(object sender, EventArgs e)
+        {
+            EncPassword encPassword = new();
+            EditEncPassForm editEncPassForm = new(encPassword);
+
+            if (editEncPassForm.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            this._encPassword = encPassword.Password;
         }
 
         private void AddEntryClickHandler(object sender, EventArgs e)

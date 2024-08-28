@@ -22,6 +22,9 @@
         private void InitializeComponent()
         {
             passwordTable = new DataGridView();
+            Description = new DataGridViewTextBoxColumn();
+            Username = new DataGridViewTextBoxColumn();
+            Password = new DataGridViewTextBoxColumn();
             addButton = new Button();
             removeButton = new Button();
             editButton = new Button();
@@ -33,12 +36,9 @@
             saveAsToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             actionsToolStripMenuItem = new ToolStripMenuItem();
-            changeGlobalPasswordToolStripMenuItem = new ToolStripMenuItem();
+            changeRepoPassToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             versionToolStripMenuItem = new ToolStripMenuItem();
-            Description = new DataGridViewTextBoxColumn();
-            Username = new DataGridViewTextBoxColumn();
-            Password = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)passwordTable).BeginInit();
             mainMenuStrip.SuspendLayout();
             SuspendLayout();
@@ -60,6 +60,33 @@
             passwordTable.SelectionMode = DataGridViewSelectionMode.CellSelect;
             passwordTable.Size = new Size(943, 625);
             passwordTable.TabIndex = 0;
+            // 
+            // Description
+            // 
+            Description.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Description.HeaderText = "Description";
+            Description.MinimumWidth = 250;
+            Description.Name = "Description";
+            Description.ReadOnly = true;
+            Description.Resizable = DataGridViewTriState.False;
+            // 
+            // Username
+            // 
+            Username.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Username.HeaderText = "Username";
+            Username.MinimumWidth = 250;
+            Username.Name = "Username";
+            Username.ReadOnly = true;
+            Username.Resizable = DataGridViewTriState.False;
+            // 
+            // Password
+            // 
+            Password.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Password.HeaderText = "Password";
+            Password.MinimumWidth = 250;
+            Password.Name = "Password";
+            Password.ReadOnly = true;
+            Password.Resizable = DataGridViewTriState.False;
             // 
             // addButton
             // 
@@ -144,16 +171,17 @@
             // 
             // actionsToolStripMenuItem
             // 
-            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changeGlobalPasswordToolStripMenuItem });
+            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { changeRepoPassToolStripMenuItem });
             actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
             actionsToolStripMenuItem.Size = new Size(59, 20);
             actionsToolStripMenuItem.Text = "Actions";
             // 
-            // changeGlobalPasswordToolStripMenuItem
+            // changeRepoPassToolStripMenuItem
             // 
-            changeGlobalPasswordToolStripMenuItem.Name = "changeGlobalPasswordToolStripMenuItem";
-            changeGlobalPasswordToolStripMenuItem.Size = new Size(189, 22);
-            changeGlobalPasswordToolStripMenuItem.Text = "Change File Password";
+            changeRepoPassToolStripMenuItem.Name = "changeRepoPassToolStripMenuItem";
+            changeRepoPassToolStripMenuItem.Size = new Size(198, 22);
+            changeRepoPassToolStripMenuItem.Text = "Change Repo Password";
+            changeRepoPassToolStripMenuItem.Click += ActionChangeRepoPasswordClickHandler;
             // 
             // aboutToolStripMenuItem
             // 
@@ -168,33 +196,6 @@
             versionToolStripMenuItem.Size = new Size(112, 22);
             versionToolStripMenuItem.Text = "Version";
             versionToolStripMenuItem.Click += AboutVersionClickHandler;
-            // 
-            // Description
-            // 
-            Description.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Description.HeaderText = "Description";
-            Description.MinimumWidth = 250;
-            Description.Name = "Description";
-            Description.ReadOnly = true;
-            Description.Resizable = DataGridViewTriState.False;
-            // 
-            // Username
-            // 
-            Username.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Username.HeaderText = "Username";
-            Username.MinimumWidth = 250;
-            Username.Name = "Username";
-            Username.ReadOnly = true;
-            Username.Resizable = DataGridViewTriState.False;
-            // 
-            // Password
-            // 
-            Password.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Password.HeaderText = "Password";
-            Password.MinimumWidth = 250;
-            Password.Name = "Password";
-            Password.ReadOnly = true;
-            Password.Resizable = DataGridViewTriState.False;
             // 
             // MainForm
             // 
@@ -232,7 +233,7 @@
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem actionsToolStripMenuItem;
-        private ToolStripMenuItem changeGlobalPasswordToolStripMenuItem;
+        private ToolStripMenuItem changeRepoPassToolStripMenuItem;
         private ToolStripMenuItem versionToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;

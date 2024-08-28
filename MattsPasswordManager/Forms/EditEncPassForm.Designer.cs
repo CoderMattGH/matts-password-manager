@@ -1,6 +1,6 @@
 ﻿namespace MattsPasswordManager.Forms
 {
-    partial class AddEncPassForm
+    partial class EditEncPassForm
     {
         /// <summary>
         /// Required designer variable.
@@ -70,7 +70,7 @@
             confPasswordTextBox.Name = "confPasswordTextBox";
             confPasswordTextBox.Size = new Size(312, 23);
             confPasswordTextBox.TabIndex = 4;
-            confPasswordTextBox.UseSystemPasswordChar = true;
+            confPasswordTextBox.UseSystemPasswordChar = true; 
             // 
             // okButton
             // 
@@ -97,9 +97,9 @@
             titleLabel.AutoSize = true;
             titleLabel.Location = new Point(14, 18);
             titleLabel.Name = "titleLabel";
-            titleLabel.Size = new Size(254, 15);
+            titleLabel.Size = new Size(279, 15);
             titleLabel.TabIndex = 8;
-            titleLabel.Text = "Set a password for the password repository file.";
+            titleLabel.Text = "Set a new password for the password repository file.";
             // 
             // warningLabel
             // 
@@ -111,7 +111,7 @@
             warningLabel.TabIndex = 9;
             warningLabel.Text = "Warning: Please make a note of this password!";
             // 
-            // AddEncPassForm
+            // EditEncPassForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -128,9 +128,9 @@
             MaximizeBox = false;
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
-            Name = "AddEncPassForm";
+            Name = "EditEncPassForm";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Add File Password";
+            Text = "Replace File Password";
             ResumeLayout(false);
             PerformLayout();
         }
