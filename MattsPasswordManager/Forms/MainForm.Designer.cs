@@ -1,4 +1,4 @@
-﻿namespace MattsPasswordManager
+﻿namespace MattsPasswordManager.Forms
 {
     partial class MainForm
     {

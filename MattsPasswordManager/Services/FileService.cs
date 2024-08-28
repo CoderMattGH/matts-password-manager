@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using MattsPasswordManager.DTOs;
 
-namespace MattsPasswordManager
+namespace MattsPasswordManager.Services
 {
     internal class FileService
     {

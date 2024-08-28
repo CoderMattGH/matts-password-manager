@@ -12,7 +12,7 @@ using MattsPasswordManager.Validators;
 
 namespace MattsPasswordManager.Forms
 {
-    public partial class AddEntryForm : Form
+    internal partial class AddEntryForm : Form
     {
         private readonly Entry entry;
 

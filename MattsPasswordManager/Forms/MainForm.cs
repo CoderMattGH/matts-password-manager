@@ -1,7 +1,8 @@
 using MattsPasswordManager.DTOs;
 using MattsPasswordManager.Forms;
+using MattsPasswordManager.Services;
 
-namespace MattsPasswordManager
+namespace MattsPasswordManager.Forms
 {
     public partial class MainForm : Form
     {

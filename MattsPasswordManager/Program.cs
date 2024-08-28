@@ -1,3 +1,5 @@
+using MattsPasswordManager.Forms;
+
 namespace MattsPasswordManager
 {
     internal static class Program
