@@ -37,6 +37,8 @@
             changeGlobalPasswordToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             creditsToolStripMenuItem = new ToolStripMenuItem();
+            newToolStripMenuItem = new ToolStripMenuItem();
+            saveAsToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)passwordTable).BeginInit();
             mainMenuStrip.SuspendLayout();
             SuspendLayout();
@@ -125,7 +127,7 @@
             // 
             // fileMenuStripItem
             // 
-            fileMenuStripItem.DropDownItems.AddRange(new ToolStripItem[] { loadToolStripMenuItem, saveToolStripMenuItem, exitToolStripMenuItem });
+            fileMenuStripItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, loadToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, exitToolStripMenuItem });
             fileMenuStripItem.Name = "fileMenuStripItem";
             fileMenuStripItem.Size = new Size(37, 20);
             fileMenuStripItem.Text = "&File";
@@ -133,21 +135,21 @@
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(100, 22);
+            loadToolStripMenuItem.Size = new Size(180, 22);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += FileLoadClickHandler;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(100, 22);
+            saveToolStripMenuItem.Size = new Size(180, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += FileSaveClickHandler;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(100, 22);
+            exitToolStripMenuItem.Size = new Size(180, 22);
             exitToolStripMenuItem.Text = "Exit";
             // 
             // actionsToolStripMenuItem
@@ -175,6 +177,19 @@
             creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
             creditsToolStripMenuItem.Size = new Size(111, 22);
             creditsToolStripMenuItem.Text = "Credits";
+            // 
+            // newToolStripMenuItem
+            // 
+            newToolStripMenuItem.Name = "newToolStripMenuItem";
+            newToolStripMenuItem.Size = new Size(180, 22);
+            newToolStripMenuItem.Text = "New";
+            newToolStripMenuItem.Click += FileNewClickHandler;
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            saveAsToolStripMenuItem.Size = new Size(180, 22);
+            saveAsToolStripMenuItem.Text = "Save As";
             // 
             // MainForm
             // 
@@ -216,5 +231,7 @@
         private ToolStripMenuItem actionsToolStripMenuItem;
         private ToolStripMenuItem changeGlobalPasswordToolStripMenuItem;
         private ToolStripMenuItem creditsToolStripMenuItem;
+        private ToolStripMenuItem newToolStripMenuItem;
+        private ToolStripMenuItem saveAsToolStripMenuItem;
     }
 }

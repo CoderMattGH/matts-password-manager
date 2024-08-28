@@ -15,6 +15,12 @@ namespace MattsPasswordManager.Forms
             InitializeComponent();
         }
 
+        private void FileNewClickHandler(object sender, EventArgs e)
+        {
+            _openFilePath = "";
+            passwordTable.Rows.Clear();
+        }
+
         private void FileLoadClickHandler(object sender, EventArgs e)
         {
             // Get filename
