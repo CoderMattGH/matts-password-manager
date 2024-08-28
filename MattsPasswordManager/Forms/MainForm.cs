@@ -9,6 +9,7 @@ namespace MattsPasswordManager.Forms
         public static readonly string FILE_EXT_FILTER = "MPM Files (*.mpm)|*.mpm";
 
         private string _openFilePath = "";
+        private string _encPassword = "";
         private Boolean _isModified = false;
 
         public MainForm()
@@ -216,6 +217,20 @@ namespace MattsPasswordManager.Forms
 
         private Boolean SaveTable(Boolean forceSaveToNewFile = false)
         {
+            // TODO: Use this encPassword as a key
+            if (this._encPassword == "")
+            {
+                EncPassword encPassword = new EncPassword();
+                AddEncPassForm encPassForm = new(encPassword);
+
+                if (encPassForm.ShowDialog() != DialogResult.OK)
+                {
+                    return false;
+                }
+
+                this._encPassword = encPassword.Password;
+            }
+
             // Convert all the table entrys to Entry objects
             List<Entry> entries = [];
 
