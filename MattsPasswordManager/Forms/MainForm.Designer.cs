@@ -30,15 +30,15 @@
             editButton = new Button();
             mainMenuStrip = new MenuStrip();
             fileMenuStripItem = new ToolStripMenuItem();
+            newToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
+            saveAsToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             actionsToolStripMenuItem = new ToolStripMenuItem();
             changeGlobalPasswordToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
-            creditsToolStripMenuItem = new ToolStripMenuItem();
-            newToolStripMenuItem = new ToolStripMenuItem();
-            saveAsToolStripMenuItem = new ToolStripMenuItem();
+            versionToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)passwordTable).BeginInit();
             mainMenuStrip.SuspendLayout();
             SuspendLayout();
@@ -132,24 +132,37 @@
             fileMenuStripItem.Size = new Size(37, 20);
             fileMenuStripItem.Text = "&File";
             // 
+            // newToolStripMenuItem
+            // 
+            newToolStripMenuItem.Name = "newToolStripMenuItem";
+            newToolStripMenuItem.Size = new Size(114, 22);
+            newToolStripMenuItem.Text = "New";
+            newToolStripMenuItem.Click += FileNewClickHandler;
+            // 
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(180, 22);
+            loadToolStripMenuItem.Size = new Size(114, 22);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += FileLoadClickHandler;
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(180, 22);
+            saveToolStripMenuItem.Size = new Size(114, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += FileSaveClickHandler;
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            saveAsToolStripMenuItem.Size = new Size(114, 22);
+            saveAsToolStripMenuItem.Text = "Save As";
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(114, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += FileExitClickHandler;
             // 
@@ -168,32 +181,16 @@
             // 
             // aboutToolStripMenuItem
             // 
-            aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { creditsToolStripMenuItem });
+            aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { versionToolStripMenuItem });
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(52, 20);
             aboutToolStripMenuItem.Text = "A&bout";
             // 
-            // creditsToolStripMenuItem
+            // versionToolStripMenuItem
             // 
-            creditsToolStripMenuItem.Name = "creditsToolStripMenuItem";
-            creditsToolStripMenuItem.Size = new Size(111, 22);
-            creditsToolStripMenuItem.Text = "Credits";
-            // 
-            // newToolStripMenuItem
-            // 
-            newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(180, 22);
-            newToolStripMenuItem.Text = "New";
-            newToolStripMenuItem.Click += FileNewClickHandler;
-            // 
-            // saveAsToolStripMenuItem
-            // 
-            saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(180, 22);
-            saveAsToolStripMenuItem.Text = "Save As";
-
-            this.FormClosing += new FormClosingEventHandler(CloseButtonHandler);
-
+            versionToolStripMenuItem.Name = "versionToolStripMenuItem";
+            versionToolStripMenuItem.Size = new Size(180, 22);
+            versionToolStripMenuItem.Text = "Version";
             // 
             // MainForm
             // 
@@ -210,6 +207,7 @@
             MaximizeBox = false;
             Name = "MainForm";
             Text = "Matt's Password Manager";
+            FormClosing += CloseButtonHandler;
             ((System.ComponentModel.ISupportInitialize)passwordTable).EndInit();
             mainMenuStrip.ResumeLayout(false);
             mainMenuStrip.PerformLayout();
@@ -234,7 +232,7 @@
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem actionsToolStripMenuItem;
         private ToolStripMenuItem changeGlobalPasswordToolStripMenuItem;
-        private ToolStripMenuItem creditsToolStripMenuItem;
+        private ToolStripMenuItem versionToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
     }
