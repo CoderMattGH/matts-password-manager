@@ -112,6 +112,7 @@
             editButton.TabIndex = 3;
             editButton.Text = "Edit";
             editButton.UseVisualStyleBackColor = true;
+            editButton.Click += EditEntryClickhandler;
             // 
             // mainMenuStrip
             // 

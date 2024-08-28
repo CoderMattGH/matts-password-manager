@@ -12,15 +12,20 @@ using MattsPasswordManager.Validators;
 
 namespace MattsPasswordManager.Forms
 {
-    internal partial class AddEntryForm : Form
+    internal partial class EditEntryForm : Form
     {
         private readonly Entry entry;
 
-        public AddEntryForm(Entry entry)
+        public EditEntryForm(Entry entry)
         {
             this.entry = entry;
 
             InitializeComponent();
+
+            // Set current values
+            descriptionTextBox.Text = entry.Description;
+            usernameTextBox.Text = entry.Username;
+            passwordTextBox.Text = entry.Password;
         }
 
         private void OKButtonClickHandler(object sender, EventArgs e)

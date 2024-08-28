@@ -117,6 +117,48 @@ namespace MattsPasswordManager.Forms
             }
         }
 
+        private void EditEntryClickhandler(object sender, EventArgs e)
+        {
+            // Get values from selected row.
+            DataGridViewRow row = passwordTable.CurrentRow;
+
+            if (row == null)
+            {
+                MessageBox.Show(
+                    this,
+                    "No rows selected!",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                return;
+            }
+
+            string description = row.Cells[0].Value.ToString() ?? "";
+            string username = row.Cells[1].Value.ToString() ?? "";
+            string password = row.Cells[2].Value.ToString() ?? "";
+
+            Entry entry =
+                new()
+                {
+                    Description = description,
+                    Username = username,
+                    Password = password
+                };
+
+            EditEntryForm editEntryForm = new(entry);
+            if (editEntryForm.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Update row
+            row.Cells[0].Value = entry.Description;
+            row.Cells[1].Value = entry.Username;
+            row.Cells[2].Value = entry.Password;
+        }
+
         private void RemoveEntryClickHandler(object sender, EventArgs e)
         {
             DataGridViewRow selectedRow = passwordTable.CurrentRow;
