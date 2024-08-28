@@ -22,9 +22,6 @@
         private void InitializeComponent()
         {
             passwordTable = new DataGridView();
-            Description = new DataGridViewTextBoxColumn();
-            Username = new DataGridViewTextBoxColumn();
-            Password = new DataGridViewTextBoxColumn();
             addButton = new Button();
             removeButton = new Button();
             editButton = new Button();
@@ -39,6 +36,9 @@
             changeGlobalPasswordToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             versionToolStripMenuItem = new ToolStripMenuItem();
+            Description = new DataGridViewTextBoxColumn();
+            Username = new DataGridViewTextBoxColumn();
+            Password = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)passwordTable).BeginInit();
             mainMenuStrip.SuspendLayout();
             SuspendLayout();
@@ -55,36 +55,11 @@
             passwordTable.MultiSelect = false;
             passwordTable.Name = "passwordTable";
             passwordTable.ReadOnly = true;
+            passwordTable.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
+            passwordTable.ScrollBars = ScrollBars.Vertical;
             passwordTable.SelectionMode = DataGridViewSelectionMode.CellSelect;
             passwordTable.Size = new Size(943, 625);
             passwordTable.TabIndex = 0;
-            // 
-            // Description
-            // 
-            Description.HeaderText = "Description";
-            Description.MinimumWidth = 300;
-            Description.Name = "Description";
-            Description.ReadOnly = true;
-            Description.Resizable = DataGridViewTriState.False;
-            Description.Width = 300;
-            // 
-            // Username
-            // 
-            Username.HeaderText = "Username";
-            Username.MinimumWidth = 300;
-            Username.Name = "Username";
-            Username.ReadOnly = true;
-            Username.Resizable = DataGridViewTriState.False;
-            Username.Width = 300;
-            // 
-            // Password
-            // 
-            Password.HeaderText = "Password";
-            Password.MinimumWidth = 300;
-            Password.Name = "Password";
-            Password.ReadOnly = true;
-            Password.Resizable = DataGridViewTriState.False;
-            Password.Width = 300;
             // 
             // addButton
             // 
@@ -190,9 +165,36 @@
             // versionToolStripMenuItem
             // 
             versionToolStripMenuItem.Name = "versionToolStripMenuItem";
-            versionToolStripMenuItem.Size = new Size(180, 22);
+            versionToolStripMenuItem.Size = new Size(112, 22);
             versionToolStripMenuItem.Text = "Version";
             versionToolStripMenuItem.Click += AboutVersionClickHandler;
+            // 
+            // Description
+            // 
+            Description.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Description.HeaderText = "Description";
+            Description.MinimumWidth = 250;
+            Description.Name = "Description";
+            Description.ReadOnly = true;
+            Description.Resizable = DataGridViewTriState.False;
+            // 
+            // Username
+            // 
+            Username.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Username.HeaderText = "Username";
+            Username.MinimumWidth = 250;
+            Username.Name = "Username";
+            Username.ReadOnly = true;
+            Username.Resizable = DataGridViewTriState.False;
+            // 
+            // Password
+            // 
+            Password.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            Password.HeaderText = "Password";
+            Password.MinimumWidth = 250;
+            Password.Name = "Password";
+            Password.ReadOnly = true;
+            Password.Resizable = DataGridViewTriState.False;
             // 
             // MainForm
             // 
@@ -220,9 +222,6 @@
         #endregion
 
         private DataGridView passwordTable;
-        private DataGridViewTextBoxColumn Description;
-        private DataGridViewTextBoxColumn Username;
-        private DataGridViewTextBoxColumn Password;
         private Button addButton;
         private Button removeButton;
         private Button editButton;
@@ -237,5 +236,8 @@
         private ToolStripMenuItem versionToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
+        private DataGridViewTextBoxColumn Description;
+        private DataGridViewTextBoxColumn Username;
+        private DataGridViewTextBoxColumn Password;
     }
 }
