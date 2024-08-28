@@ -97,6 +97,24 @@ namespace MattsPasswordManager.Forms
             }
         }
 
+        private void FileSaveAsClickHandler(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveTable(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    this,
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+        }
+
         private void AddEntryClickHandler(object sender, EventArgs e)
         {
             Entry entry = new();
@@ -191,7 +209,7 @@ namespace MattsPasswordManager.Forms
             passwordTable.Rows.Add(entry.Description, entry.Username, entry.Password);
         }
 
-        private Boolean SaveTable()
+        private Boolean SaveTable(Boolean forceSaveToNewFile = false)
         {
             // Convert all the table entrys to Entry objects
             List<Entry> entries = [];
@@ -215,7 +233,7 @@ namespace MattsPasswordManager.Forms
                 entries.Add(entry);
             }
 
-            if (this._openFilePath == "")
+            if (this._openFilePath == "" || forceSaveToNewFile)
             {
                 SaveFileDialog saveFileDialog =
                     new() { Filter = FILE_EXT_FILTER, Title = "Save a file" };

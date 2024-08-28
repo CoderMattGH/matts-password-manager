@@ -158,6 +158,7 @@
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             saveAsToolStripMenuItem.Size = new Size(114, 22);
             saveAsToolStripMenuItem.Text = "Save As";
+            saveAsToolStripMenuItem.Click += FileSaveAsClickHandler;
             // 
             // exitToolStripMenuItem
             // 
