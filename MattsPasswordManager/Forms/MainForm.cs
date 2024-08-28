@@ -9,6 +9,7 @@ namespace MattsPasswordManager.Forms
         public static readonly string FILE_EXT_FILTER = "MPM Files (*.mpm)|*.mpm";
 
         private string _openFilePath = "";
+        private Boolean _isModified = false;
 
         public MainForm()
         {
@@ -18,11 +19,30 @@ namespace MattsPasswordManager.Forms
         private void FileNewClickHandler(object sender, EventArgs e)
         {
             _openFilePath = "";
+            _isModified = false;
             passwordTable.Rows.Clear();
+        }
+
+        private void FileExitClickHandler(object sender, EventArgs e)
+        {
+            if (CloseAppPrep())
+            {
+                this.Close();
+            }
+        }
+
+        private void CloseButtonHandler(object sender, FormClosingEventArgs e)
+        {
+            if (!CloseAppPrep())
+            {
+                e.Cancel = true;
+            }
         }
 
         private void FileLoadClickHandler(object sender, EventArgs e)
         {
+            _isModified = false;
+
             // Get filename
             OpenFileDialog openFileDialog =
                 new() { Filter = FILE_EXT_FILTER, Title = "Select a file" };
@@ -61,44 +81,9 @@ namespace MattsPasswordManager.Forms
 
         private void FileSaveClickHandler(object sender, EventArgs e)
         {
-            // Convert all the table entrys to Entry objects
-            List<Entry> entries = [];
-
-            for (int i = 0; i < passwordTable.Rows.Count; i++)
-            {
-                DataGridViewRow row = passwordTable.Rows[i];
-
-                string description = row.Cells[0].Value.ToString() ?? "";
-                string username = row.Cells[1].Value.ToString() ?? "";
-                string password = row.Cells[1].Value.ToString() ?? "";
-
-                Entry entry =
-                    new()
-                    {
-                        Description = description,
-                        Username = username,
-                        Password = password
-                    };
-
-                entries.Add(entry);
-            }
-
-            if (this._openFilePath == "")
-            {
-                SaveFileDialog saveFileDialog =
-                    new() { Filter = FILE_EXT_FILTER, Title = "Save a file" };
-
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-
-                this._openFilePath = saveFileDialog.FileName;
-            }
-
             try
             {
-                FileService.SavePasswordFile(this._openFilePath, entries);
+                SaveTable();
             }
             catch (Exception ex)
             {
@@ -120,6 +105,7 @@ namespace MattsPasswordManager.Forms
             if (addEntryForm.ShowDialog() == DialogResult.OK)
             {
                 AddEntryToTable(entry);
+                _isModified = true;
             }
         }
 
@@ -163,6 +149,8 @@ namespace MattsPasswordManager.Forms
             row.Cells[0].Value = entry.Description;
             row.Cells[1].Value = entry.Username;
             row.Cells[2].Value = entry.Password;
+
+            _isModified = true;
         }
 
         private void RemoveEntryClickHandler(object sender, EventArgs e)
@@ -194,12 +182,107 @@ namespace MattsPasswordManager.Forms
             if (result == DialogResult.Yes)
             {
                 passwordTable.Rows.RemoveAt(selectedRow.Index);
+                _isModified = true;
             }
         }
 
         private void AddEntryToTable(Entry entry)
         {
             passwordTable.Rows.Add(entry.Description, entry.Username, entry.Password);
+        }
+
+        private Boolean SaveTable()
+        {
+            // Convert all the table entrys to Entry objects
+            List<Entry> entries = [];
+
+            for (int i = 0; i < passwordTable.Rows.Count; i++)
+            {
+                DataGridViewRow row = passwordTable.Rows[i];
+
+                string description = row.Cells[0].Value.ToString() ?? "";
+                string username = row.Cells[1].Value.ToString() ?? "";
+                string password = row.Cells[2].Value.ToString() ?? "";
+
+                Entry entry =
+                    new()
+                    {
+                        Description = description,
+                        Username = username,
+                        Password = password
+                    };
+
+                entries.Add(entry);
+            }
+
+            if (this._openFilePath == "")
+            {
+                SaveFileDialog saveFileDialog =
+                    new() { Filter = FILE_EXT_FILTER, Title = "Save a file" };
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                {
+                    return false;
+                }
+
+                this._openFilePath = saveFileDialog.FileName;
+            }
+
+            try
+            {
+                FileService.SavePasswordFile(this._openFilePath, entries);
+                _isModified = false;
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error saving file!");
+            }
+
+            return true;
+        }
+
+        private Boolean CloseAppPrep()
+        {
+            if (_isModified)
+            {
+                DialogResult result = MessageBox.Show(
+                    this,
+                    "Would you like to save any changes before you exit?",
+                    "Question",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Cancel)
+                {
+                    return false;
+                }
+
+                if (result == DialogResult.Yes)
+                {
+                    try
+                    {
+                        if (!SaveTable())
+                        {
+                            return false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                            this,
+                            ex.Message,
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }
