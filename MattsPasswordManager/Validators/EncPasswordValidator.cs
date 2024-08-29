@@ -20,6 +20,15 @@ namespace MattsPasswordManager.Validators
                 };
             }
 
+            if (password.Trim().Length > 16)
+            {
+                return new ValidationObj()
+                {
+                    IsValid = false,
+                    Message = "Password must be 16 characters or less!"
+                };
+            }
+
             return new ValidationObj() { IsValid = true, Message = "" };
         }
 

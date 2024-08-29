@@ -43,23 +43,30 @@ namespace MattsPasswordManager.Forms
 
         private void FileLoadClickHandler(object sender, EventArgs e)
         {
-            _isModified = false;
-
             // Get filename
             OpenFileDialog openFileDialog =
                 new() { Filter = FILE_EXT_FILTER, Title = "Select a file" };
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
+                // Get repo password
+                EncPassword encPassword = new();
+                EnterPasswordForm enterPasswordForm = new(encPassword);
+
+                if (enterPasswordForm.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
                 // Clear the table
                 passwordTable.Rows.Clear();
 
-                string filePath = this._openFilePath = openFileDialog.FileName;
+                string filePath = openFileDialog.FileName;
 
                 List<Entry> data;
                 try
                 {
-                    data = FileService.LoadPasswordFile(filePath);
+                    data = FileService.LoadPasswordFile(filePath, encPassword.Password);
                 }
                 catch (Exception ex)
                 {
@@ -78,6 +85,10 @@ namespace MattsPasswordManager.Forms
                 {
                     AddEntryToTable(entry);
                 }
+
+                this._isModified = false;
+                this._encPassword = encPassword.Password;
+                this._openFilePath = filePath;
             }
         }
 
@@ -232,7 +243,6 @@ namespace MattsPasswordManager.Forms
 
         private Boolean SaveTable(Boolean forceSaveToNewFile = false)
         {
-            // TODO: Use this encPassword as a key
             if (this._encPassword == "")
             {
                 EncPassword encPassword = new EncPassword();
@@ -268,6 +278,7 @@ namespace MattsPasswordManager.Forms
                 entries.Add(entry);
             }
 
+            string? filePath = null;
             if (this._openFilePath == "" || forceSaveToNewFile)
             {
                 SaveFileDialog saveFileDialog =
@@ -283,17 +294,27 @@ namespace MattsPasswordManager.Forms
                     return false;
                 }
 
-                this._openFilePath = saveFileDialog.FileName;
+                filePath = saveFileDialog.FileName;
             }
 
             try
             {
-                FileService.SavePasswordFile(this._openFilePath, entries);
-                _isModified = false;
+                FileService.SavePasswordFile(
+                    filePath ?? this._openFilePath,
+                    entries,
+                    this._encPassword
+                );
             }
             catch (Exception)
             {
                 throw new Exception("Error saving file!");
+            }
+
+            this._isModified = false;
+
+            if (filePath != null)
+            {
+                this._openFilePath = filePath;
             }
 
             return true;
