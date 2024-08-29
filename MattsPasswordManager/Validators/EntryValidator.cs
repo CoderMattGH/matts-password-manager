@@ -20,6 +20,15 @@ namespace MattsPasswordManager.Validators
                 };
             }
 
+            if (description.Length > 200)
+            {
+                return new ValidationObj()
+                {
+                    Message = "Description cannot exceed 200 characters!",
+                    IsValid = false
+                };
+            }
+
             return new ValidationObj() { Message = "", IsValid = true };
         }
 
