@@ -73,5 +73,11 @@ _For development:_
 
 ### Testing
 
-To be implemented.
+* Change to the directory `<repo_root_dir>`.
+
+* Run the command:
+
+	``
+	dotnet test
+	``
 
