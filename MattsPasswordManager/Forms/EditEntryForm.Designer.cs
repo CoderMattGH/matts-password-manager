@@ -106,7 +106,7 @@
             cancelButton.UseVisualStyleBackColor = true;
             cancelButton.Click += CancelButtonClickHandler;
             // 
-            // AddEntryForm
+            // EditEntryForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -123,7 +123,8 @@
             MaximizeBox = false;
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
-            Name = "AddEntryForm";
+            Name = "EditEntryForm";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add Entry";
             ResumeLayout(false);

@@ -19,7 +19,6 @@ namespace MattsPasswordManager.Forms
         public EditEntryForm(Entry entry)
         {
             this.entry = entry;
-
             InitializeComponent();
 
             // Set current values

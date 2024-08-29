@@ -14,6 +14,8 @@ namespace MattsPasswordManager.Forms
 
         public MainForm()
         {
+            this.Icon = new Icon("MPM.ico");
+
             InitializeComponent();
         }
 

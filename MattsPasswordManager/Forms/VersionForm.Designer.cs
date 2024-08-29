@@ -55,6 +55,7 @@
             // coderMattLink
             // 
             coderMattLink.AutoSize = true;
+            coderMattLink.LinkArea = new LinkArea(0, 25);
             coderMattLink.LinkBehavior = LinkBehavior.HoverUnderline;
             coderMattLink.Location = new Point(87, 53);
             coderMattLink.Name = "coderMattLink";
@@ -62,8 +63,7 @@
             coderMattLink.TabIndex = 2;
             coderMattLink.TabStop = true;
             coderMattLink.Text = "https://www.codermatt.com";
-            coderMattLink.Links.Add(0, coderMattLink.Text.Length, "https://www.codermatt.com");
-            coderMattLink.LinkClicked += new LinkLabelLinkClickedEventHandler(CoderMattLabelClickHandler);
+            coderMattLink.LinkClicked += CoderMattLabelClickHandler;
             // 
             // VersionForm
             // 
@@ -77,6 +77,7 @@
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             Name = "VersionForm";
+            ShowIcon = false;
             Text = "Version";
             ResumeLayout(false);
             PerformLayout();

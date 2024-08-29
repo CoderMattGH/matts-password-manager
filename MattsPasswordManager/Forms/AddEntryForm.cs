@@ -19,7 +19,6 @@ namespace MattsPasswordManager.Forms
         public AddEntryForm(Entry entry)
         {
             this.entry = entry;
-
             InitializeComponent();
         }
 

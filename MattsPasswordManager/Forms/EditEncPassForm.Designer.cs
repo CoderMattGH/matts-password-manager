@@ -70,7 +70,7 @@
             confPasswordTextBox.Name = "confPasswordTextBox";
             confPasswordTextBox.Size = new Size(312, 23);
             confPasswordTextBox.TabIndex = 4;
-            confPasswordTextBox.UseSystemPasswordChar = true; 
+            confPasswordTextBox.UseSystemPasswordChar = true;
             // 
             // okButton
             // 
@@ -129,6 +129,7 @@
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             Name = "EditEncPassForm";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Replace File Password";
             ResumeLayout(false);

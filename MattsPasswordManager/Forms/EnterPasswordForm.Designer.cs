@@ -85,6 +85,7 @@
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             Name = "EnterPasswordForm";
+            ShowIcon = false;
             Text = "Enter Password";
             ResumeLayout(false);
             PerformLayout();

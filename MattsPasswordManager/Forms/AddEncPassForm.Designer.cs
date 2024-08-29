@@ -129,6 +129,7 @@
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             Name = "AddEncPassForm";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add File Password";
             ResumeLayout(false);

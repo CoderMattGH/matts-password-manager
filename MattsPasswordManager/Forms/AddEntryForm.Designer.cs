@@ -124,6 +124,7 @@
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
             Name = "AddEntryForm";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Add Entry";
             ResumeLayout(false);
