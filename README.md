@@ -3,7 +3,7 @@
 Matt's Password Manager (MPM) is a utility for storing passwords on Windows.
 
 The application allows the user to view and store saved usernames and passwords.
-The data is encrypted and saved into a repository file using the AES encryption algorithm.
+The data is encrypted and saved into a repository file using the AES encryption algorithm with a 128 bit key size.
 
 ### Requirements
 
