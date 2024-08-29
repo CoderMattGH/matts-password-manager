@@ -9,7 +9,11 @@ The data is encrypted and saved into a repository file using the AES encryption 
 
 `Microsoft Windows 7` or above.
 
-`.net Core 8.0` or above.
+`.NET Core 8.0` or above.
+
+_For development:_
+
+`.NET SDK 8.0` or above.
 
 ## User Instructions
 
@@ -27,9 +31,9 @@ The data is encrypted and saved into a repository file using the AES encryption 
 
 * Clone the repository by running:
 
-``
-git clone https://github.com/CoderMattGH/matts-file-viewer.git
-``
+	``
+	git clone https://github.com/CoderMattGH/matts-file-viewer.git
+	``
 
 ### Building for Development
 
@@ -37,9 +41,9 @@ git clone https://github.com/CoderMattGH/matts-file-viewer.git
 
 * Run the command:
 
-``
-dotnet build
-``
+	``
+	dotnet build
+	``
 
 * This will build the executable and other project files which will be accessible from the 
 `<repo_root_dir>/MattsPasswordManager/bin/Debug/net8.0-windows/` directory.
@@ -50,9 +54,9 @@ dotnet build
 
 * After building the project, run the command
 
-``
-dotnet build
-``
+	``
+	dotnet build
+	``
 
 ### Building for Production
 
@@ -60,9 +64,9 @@ dotnet build
 
 * Run the command:
 
-``
-dotnet publish -c Release
-``
+	``
+	dotnet publish -c Release
+	``
 
 * This will build the executable and other project files which will be accessible from the 
 `<repo_root_dir>/MattsPasswordManager/bin/Release/net8.0-windows/publish` directory.
