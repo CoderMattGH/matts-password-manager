@@ -42,7 +42,7 @@ _For development:_
 * Run the command:
 
 	``
-	dotnet run
+	dotnet build
 	``
 
 * This will build the executable and other project files which will be accessible from the 
@@ -55,7 +55,7 @@ _For development:_
 * After building the project, run the command
 
 	``
-	dotnet build
+	dotnet run
 	``
 
 ### Building for Production
