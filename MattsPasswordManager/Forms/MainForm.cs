@@ -128,6 +128,7 @@ namespace MattsPasswordManager.Forms
             }
 
             this._encPassword = encPassword.Password;
+            this._isModified = true;
         }
 
         private void AddEntryClickHandler(object sender, EventArgs e)
