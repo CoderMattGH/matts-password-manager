@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MattsPasswordManager.DTOs;
 
@@ -11,7 +12,7 @@ namespace MattsPasswordManager.Validators
     {
         public static ValidationObj ValidateEncPassword(string password)
         {
-            if (password == null || password.Trim().Length == 0)
+            if (password == null || password.Length == 0)
             {
                 return new ValidationObj()
                 {
@@ -20,7 +21,16 @@ namespace MattsPasswordManager.Validators
                 };
             }
 
-            if (password.Trim().Length > 16)
+            if (Regex.IsMatch(password, @"\s"))
+            {
+                return new ValidationObj()
+                {
+                    IsValid = false,
+                    Message = "Password cannot contain spaces!"
+                };
+            }
+
+            if (password.Length > 16)
             {
                 return new ValidationObj()
                 {
