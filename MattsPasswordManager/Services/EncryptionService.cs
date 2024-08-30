@@ -9,9 +9,7 @@ namespace MattsPasswordManager.Services
 {
     internal class EncryptionService
     {
-        private EncryptionService() { }
-
-        public static string EncryptString(string plainText, string key)
+        public string EncryptString(string plainText, string key)
         {
             byte[] iv;
             byte[] encrypted;
@@ -43,7 +41,7 @@ namespace MattsPasswordManager.Services
             return Convert.ToBase64String(encrypted);
         }
 
-        public static string DecryptString(string cipherTextCombined, string key)
+        public string DecryptString(string cipherTextCombined, string key)
         {
             string? plainText = null;
             byte[] fullCipher = Convert.FromBase64String(cipherTextCombined);

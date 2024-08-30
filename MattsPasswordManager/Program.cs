@@ -1,4 +1,7 @@
 using MattsPasswordManager.Forms;
+using MattsPasswordManager.Models;
+using MattsPasswordManager.Presenters;
+using MattsPasswordManager.Services;
 
 namespace MattsPasswordManager
 {
@@ -8,7 +11,18 @@ namespace MattsPasswordManager
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+
+            EncryptionService encryptionService = new EncryptionService();
+            FileService fileService = new(encryptionService);
+
+            MainModel mainModel = new();
+
+            MainPresenter mainPresenter = new(fileService, mainModel);
+            MainForm mainForm = new(mainPresenter);
+
+            mainPresenter.MainForm = mainForm;
+
+            Application.Run(mainForm);
         }
     }
 }

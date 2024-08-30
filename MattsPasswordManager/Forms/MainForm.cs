@@ -1,260 +1,71 @@
 using MattsPasswordManager.DTOs;
 using MattsPasswordManager.Forms;
+using MattsPasswordManager.Presenters;
 using MattsPasswordManager.Services;
 
 namespace MattsPasswordManager.Forms
 {
-    public partial class MainForm : Form
+    internal partial class MainForm : Form
     {
         public static readonly string FILE_EXT_FILTER = "MPM Files (*.mpm)|*.mpm";
 
-        private string _openFilePath = "";
-        private string _encPassword = "";
-        private Boolean _isModified = false;
+        private readonly MainPresenter _mainPresenter;
 
-        public MainForm()
+        public MainForm(MainPresenter mainPresenter)
         {
+            this._mainPresenter = mainPresenter;
             this.Icon = new Icon("MPM.ico");
-
             InitializeComponent();
         }
 
         private void FileNewClickHandler(object sender, EventArgs e)
         {
-            if (_isModified)
-            {
-                DialogResult result = MessageBox.Show(
-                    this,
-                    "Would you like to save any changes to the current file?",
-                    "Question",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question
-                );
-
-                if (result == DialogResult.Yes)
-                {
-                    if (!SaveTable())
-                    {
-                        return;
-                    }
-                }
-
-                if (result == DialogResult.Cancel)
-                {
-                    return;
-                }
-            }
-
-            _openFilePath = "";
-            _isModified = false;
-            _encPassword = "";
-            passwordTable.Rows.Clear();
+            _mainPresenter.NewRepo();
         }
 
         private void FileExitClickHandler(object sender, EventArgs e)
         {
-            if (CloseAppPrep())
-            {
-                this.Close();
-            }
+            Application.Exit();
         }
 
         private void CloseButtonHandler(object sender, FormClosingEventArgs e)
         {
-            if (!CloseAppPrep())
-            {
-                e.Cancel = true;
-            }
+            _mainPresenter.ProcessCloseApp(e);
         }
 
         private void FileLoadClickHandler(object sender, EventArgs e)
         {
-            // Get filename
-            OpenFileDialog openFileDialog =
-                new() { Filter = FILE_EXT_FILTER, Title = "Select a file" };
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                // Get repo password
-                EncPassword encPassword = new();
-                EnterPasswordForm enterPasswordForm = new(encPassword);
-
-                if (enterPasswordForm.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-
-                // Clear the table
-                passwordTable.Rows.Clear();
-
-                string filePath = openFileDialog.FileName;
-
-                List<Entry> data;
-                try
-                {
-                    data = FileService.LoadPasswordFile(filePath, encPassword.Password);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        this,
-                        ex.Message,
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
-
-                    return;
-                }
-
-                foreach (Entry entry in data)
-                {
-                    AddEntryToTable(entry);
-                }
-
-                this._isModified = false;
-                this._encPassword = encPassword.Password;
-                this._openFilePath = filePath;
-            }
+            _mainPresenter.LoadRepo();
         }
 
         private void FileSaveClickHandler(object sender, EventArgs e)
         {
-            try
-            {
-                SaveTable();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    this,
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
+            _mainPresenter?.SaveRepo();
         }
 
         private void FileSaveAsClickHandler(object sender, EventArgs e)
         {
-            try
-            {
-                SaveTable(true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    this,
-                    ex.Message,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-            }
+            _mainPresenter.SaveRepo(true);
         }
 
         private void ActionChangeRepoPasswordClickHandler(object sender, EventArgs e)
         {
-            EncPassword encPassword = new();
-            EditEncPassForm editEncPassForm = new(encPassword);
-
-            if (editEncPassForm.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            this._encPassword = encPassword.Password;
-            this._isModified = true;
+            _mainPresenter.ChangeRepoPassword();
         }
 
         private void AddEntryClickHandler(object sender, EventArgs e)
         {
-            Entry entry = new();
-            AddEntryForm addEntryForm = new(entry);
-
-            if (addEntryForm.ShowDialog() == DialogResult.OK)
-            {
-                AddEntryToTable(entry);
-                _isModified = true;
-            }
+            _mainPresenter.AddEntry();
         }
 
         private void EditEntryClickhandler(object sender, EventArgs e)
         {
-            // Get values from selected row.
-            DataGridViewRow row = passwordTable.CurrentRow;
-
-            if (row == null)
-            {
-                MessageBox.Show(
-                    this,
-                    "No row selected!",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-
-                return;
-            }
-
-            string description = row.Cells[0].Value.ToString() ?? "";
-            string username = row.Cells[1].Value.ToString() ?? "";
-            string password = row.Cells[2].Value.ToString() ?? "";
-
-            Entry entry =
-                new()
-                {
-                    Description = description,
-                    Username = username,
-                    Password = password
-                };
-
-            EditEntryForm editEntryForm = new(entry);
-            if (editEntryForm.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            // Update row
-            row.Cells[0].Value = entry.Description;
-            row.Cells[1].Value = entry.Username;
-            row.Cells[2].Value = entry.Password;
-
-            _isModified = true;
+            _mainPresenter.EditEntry();
         }
 
         private void RemoveEntryClickHandler(object sender, EventArgs e)
         {
-            DataGridViewRow selectedRow = passwordTable.CurrentRow;
-
-            if (selectedRow == null)
-            {
-                MessageBox.Show(
-                    this,
-                    "No row selected!",
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
-
-                return;
-            }
-
-            // Confirm delete
-            DialogResult result = MessageBox.Show(
-                this,
-                "Are you sure you want to remove this entry?",
-                "Confirmation",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (result == DialogResult.Yes)
-            {
-                passwordTable.Rows.RemoveAt(selectedRow.Index);
-                _isModified = true;
-            }
+            _mainPresenter.RemoveEntry();
         }
 
         private void AboutVersionClickHandler(object sender, EventArgs e)
@@ -262,26 +73,95 @@ namespace MattsPasswordManager.Forms
             new VersionForm().ShowDialog();
         }
 
-        private void AddEntryToTable(Entry entry)
+        public DialogResult ShowConfirmationDialog(string message)
         {
-            passwordTable.Rows.Add(entry.Description, entry.Username, entry.Password);
+            DialogResult result = MessageBox.Show(
+                message,
+                "Question",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question
+            );
+
+            return result;
         }
 
-        private Boolean SaveTable(Boolean forceSaveToNewFile = false)
+        public void ShowErrorDialog(string message)
         {
-            if (this._encPassword == "")
-            {
-                EncPassword encPassword = new EncPassword();
-                AddEncPassForm encPassForm = new(encPassword);
+            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
 
-                if (encPassForm.ShowDialog() != DialogResult.OK)
+        public string? ShowSaveFileDialog()
+        {
+            SaveFileDialog saveFileDialog =
+                new()
                 {
-                    return false;
-                }
+                    Filter = FILE_EXT_FILTER,
+                    Title = "Save a file",
+                    OverwritePrompt = true
+                };
 
-                this._encPassword = encPassword.Password;
+            DialogResult result = saveFileDialog.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                return saveFileDialog.FileName;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public string? ShowOpenFileDialog()
+        {
+            OpenFileDialog openFileDialog =
+                new() { Filter = FILE_EXT_FILTER, Title = "Select a file" };
+
+            if (openFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return null;
             }
 
+            return openFileDialog.FileName;
+        }
+
+        public DialogResult ShowAddEntryForm(Entry entry)
+        {
+            AddEntryForm addEntryForm = new(entry);
+
+            return addEntryForm.ShowDialog();
+        }
+
+        public DialogResult ShowEditEntryForm(Entry entry)
+        {
+            EditEntryForm editEntryForm = new(entry);
+
+            return editEntryForm.ShowDialog();
+        }
+
+        public DialogResult ShowEditEncPasswordForm(EncPassword encPassword)
+        {
+            EditEncPassForm editEncPassForm = new(encPassword);
+
+            return editEncPassForm.ShowDialog();
+        }
+
+        public DialogResult ShowAddEncPasswordForm(EncPassword encPassword)
+        {
+            AddEncPassForm addEncPassForm = new(encPassword);
+
+            return addEncPassForm.ShowDialog();
+        }
+
+        public DialogResult ShowEnterEncPasswordForm(EncPassword encPassword)
+        {
+            EnterPasswordForm enterPasswordForm = new(encPassword);
+
+            return enterPasswordForm.ShowDialog();
+        }
+
+        public List<Entry> GetTableEntries()
+        {
             // Convert all the table entrys to Entry objects
             List<Entry> entries = [];
 
@@ -304,90 +184,27 @@ namespace MattsPasswordManager.Forms
                 entries.Add(entry);
             }
 
-            string? filePath = null;
-            if (this._openFilePath == "" || forceSaveToNewFile)
-            {
-                SaveFileDialog saveFileDialog =
-                    new()
-                    {
-                        Filter = FILE_EXT_FILTER,
-                        Title = "Save a file",
-                        OverwritePrompt = true
-                    };
-
-                if (saveFileDialog.ShowDialog() != DialogResult.OK)
-                {
-                    return false;
-                }
-
-                filePath = saveFileDialog.FileName;
-            }
-
-            try
-            {
-                FileService.SavePasswordFile(
-                    filePath ?? this._openFilePath,
-                    entries,
-                    this._encPassword
-                );
-            }
-            catch (Exception)
-            {
-                throw new Exception("Error saving file!");
-            }
-
-            this._isModified = false;
-
-            if (filePath != null)
-            {
-                this._openFilePath = filePath;
-            }
-
-            return true;
+            return entries;
         }
 
-        private Boolean CloseAppPrep()
+        public DataGridViewRow GetSelectedRow()
         {
-            if (_isModified)
-            {
-                DialogResult result = MessageBox.Show(
-                    this,
-                    "Would you like to save any changes before you exit?",
-                    "Question",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question
-                );
+            return passwordTable.CurrentRow;
+        }
 
-                if (result == DialogResult.Cancel)
-                {
-                    return false;
-                }
+        public void AddEntryToTable(Entry entry)
+        {
+            passwordTable.Rows.Add(entry.Description, entry.Username, entry.Password);
+        }
 
-                if (result == DialogResult.Yes)
-                {
-                    try
-                    {
-                        if (!SaveTable())
-                        {
-                            return false;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(
-                            this,
-                            ex.Message,
-                            "Error",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error
-                        );
+        public void RemoveEntryInTable(int index)
+        {
+            passwordTable.Rows.RemoveAt(index);
+        }
 
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+        public void ClearTable()
+        {
+            passwordTable.Rows.Clear();
         }
     }
 }

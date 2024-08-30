@@ -11,9 +11,14 @@ namespace MattsPasswordManager.Services
 {
     internal class FileService
     {
-        private FileService() { }
+        private readonly EncryptionService _encryptionService;
 
-        public static List<Entry> LoadPasswordFile(string filePath, string encPassword)
+        public FileService(EncryptionService encryptionService)
+        {
+            this._encryptionService = encryptionService;
+        }
+
+        public List<Entry> LoadPasswordFile(string filePath, string encPassword)
         {
             // Load file
             string content;
@@ -30,7 +35,7 @@ namespace MattsPasswordManager.Services
             string decContent;
             try
             {
-                decContent = EncryptionService.DecryptString(content, encPassword);
+                decContent = _encryptionService.DecryptString(content, encPassword);
             }
             catch (CryptographicException)
             {
@@ -55,11 +60,7 @@ namespace MattsPasswordManager.Services
             return entries;
         }
 
-        public static void SavePasswordFile(
-            string filePath,
-            List<Entry> entries,
-            string encPassword
-        )
+        public void SavePasswordFile(string filePath, List<Entry> entries, string encPassword)
         {
             // Convert to JSON
             string jsonString = JsonSerializer.Serialize(entries);
@@ -67,7 +68,7 @@ namespace MattsPasswordManager.Services
             string encJsonString;
             try
             {
-                encJsonString = EncryptionService.EncryptString(jsonString, encPassword);
+                encJsonString = _encryptionService.EncryptString(jsonString, encPassword);
             }
             catch (Exception ex)
             {
