@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MattsPasswordManager.DTOs;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace MattsPasswordManager.Validators
 {
@@ -75,6 +76,24 @@ namespace MattsPasswordManager.Validators
                 {
                     Message = "Password cannot be empty!",
                     IsValid = false
+                };
+            }
+
+            if (password.Length > 100)
+            {
+                return new ValidationObj()
+                {
+                    Message = "Password cannot exceed 100 characters!",
+                    IsValid = false
+                };
+            }
+
+            if (Regex.IsMatch(password, @"\s"))
+            {
+                return new ValidationObj()
+                {
+                    Message = "Password cannot contain spaces!",
+                    IsValid = false,
                 };
             }
 

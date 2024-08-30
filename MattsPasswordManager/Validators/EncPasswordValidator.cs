@@ -10,6 +10,8 @@ namespace MattsPasswordManager.Validators
 {
     internal class EncPasswordValidator
     {
+        private EncPasswordValidator() { }
+
         public static ValidationObj ValidateEncPassword(string password)
         {
             if (password == null || password.Length == 0)

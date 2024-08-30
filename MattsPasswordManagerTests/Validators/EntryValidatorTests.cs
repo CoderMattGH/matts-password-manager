@@ -160,4 +160,66 @@ public class EntryValidatorTests
             Assert.Equal("Username cannot exceed 100 characters!", result.Message);
         }
     }
+
+    public class ValidatePasswordTests
+    {
+        [Fact]
+        public void ValidPassword_ReturnsValid()
+        {
+            string password = "password";
+
+            var result = EntryValidator.ValidatePassword(password);
+
+            Assert.True(result.IsValid);
+        }
+
+        [Fact]
+        public void EmptyPassword_ReturnsInvalid()
+        {
+            string password = "";
+
+            var result = EntryValidator.ValidatePassword(password);
+
+            Assert.False(result.IsValid);
+            Assert.Equal("Password cannot be empty!", result.Message);
+        }
+
+        [Fact]
+        public void JustSpaces_ReturnsInvalid()
+        {
+            string password = "   ";
+
+            var result = EntryValidator.ValidatePassword(password);
+
+            Assert.False(result.IsValid);
+            Assert.Equal("Password cannot be empty!", result.Message);
+        }
+
+        [Fact]
+        public void TooLong_ReturnsInvalid()
+        {
+            string password = "";
+
+            for (int i = 0; i < 101; i++)
+            {
+                password += "A";
+            }
+
+            var result = EntryValidator.ValidatePassword(password);
+
+            Assert.False(result.IsValid);
+            Assert.Equal("Password cannot exceed 100 characters!", result.Message);
+        }
+
+        [Fact]
+        public void ContainsSpaces_ReturnsInvalid()
+        {
+            string password = "password d";
+
+            var result = EntryValidator.ValidatePassword(password);
+
+            Assert.False(result.IsValid);
+            Assert.Equal("Password cannot contain spaces!", result.Message);
+        }
+    }
 }
