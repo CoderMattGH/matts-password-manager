@@ -11,6 +11,8 @@ namespace MattsPasswordManager.Services
 {
     internal class FileService
     {
+        private FileService() { }
+
         public static List<Entry> LoadPasswordFile(string filePath, string encPassword)
         {
             // Load file
