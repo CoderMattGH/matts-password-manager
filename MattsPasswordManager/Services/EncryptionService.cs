@@ -9,6 +9,8 @@ namespace MattsPasswordManager.Services
 {
     internal class EncryptionService
     {
+        private EncryptionService() { }
+
         public static string EncryptString(string plainText, string key)
         {
             byte[] iv;
