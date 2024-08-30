@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MattsPasswordManager.DTOs;
 
@@ -9,6 +10,8 @@ namespace MattsPasswordManager.Validators
 {
     internal class EntryValidator
     {
+        private EntryValidator() { }
+
         public static ValidationObj ValidateDescription(string description)
         {
             if (description == null || description.Trim().Length == 0)
@@ -40,6 +43,24 @@ namespace MattsPasswordManager.Validators
                 {
                     Message = "Username cannot be empty!",
                     IsValid = false
+                };
+            }
+
+            if (username.Length > 100)
+            {
+                return new ValidationObj()
+                {
+                    Message = "Username cannot exceed 100 characters!",
+                    IsValid = false
+                };
+            }
+
+            if (Regex.IsMatch(username, @"\s"))
+            {
+                return new ValidationObj()
+                {
+                    IsValid = false,
+                    Message = "Username cannot contain spaces!"
                 };
             }
 
