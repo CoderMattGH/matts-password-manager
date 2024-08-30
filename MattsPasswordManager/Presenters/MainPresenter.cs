@@ -13,15 +13,15 @@ namespace MattsPasswordManager.Presenters
 {
     internal class MainPresenter
     {
-        private readonly MainForm _mainForm;
+        private readonly IMainForm _mainForm;
         private readonly FileService _fileService;
         private readonly MainModel _mainModel;
 
-        public MainPresenter(FileService fileService, MainModel mainModel, MainForm mainForm)
+        public MainPresenter(IMainForm mainForm, MainModel mainModel, FileService fileService)
         {
-            this._fileService = fileService;
-            this._mainModel = mainModel;
             this._mainForm = mainForm;
+            this._mainModel = mainModel;
+            this._fileService = fileService;
 
             _mainForm.CloseButtonClick += ProcessCloseApp;
             _mainForm.FileNewClick += NewRepo;

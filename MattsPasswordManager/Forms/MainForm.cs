@@ -5,7 +5,7 @@ using MattsPasswordManager.Services;
 
 namespace MattsPasswordManager.Forms
 {
-    internal partial class MainForm : Form
+    internal partial class MainForm : Form, IMainForm
     {
         public static readonly string FILE_EXT_FILTER = "MPM Files (*.mpm)|*.mpm";
 
@@ -26,57 +26,57 @@ namespace MattsPasswordManager.Forms
             InitializeComponent();
         }
 
-        private void FileNewClickHandler(object sender, EventArgs e)
+        public void FileNewClickHandler(object sender, EventArgs e)
         {
             FileNewClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void FileExitClickHandler(object sender, EventArgs e)
+        public void FileExitClickHandler(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void CloseButtonHandler(object sender, FormClosingEventArgs e)
+        public void CloseButtonHandler(object sender, FormClosingEventArgs e)
         {
             CloseButtonClick?.Invoke(this, e);
         }
 
-        private void FileLoadClickHandler(object sender, EventArgs e)
+        public void FileLoadClickHandler(object sender, EventArgs e)
         {
             FileLoadClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void FileSaveClickHandler(object sender, EventArgs e)
+        public void FileSaveClickHandler(object sender, EventArgs e)
         {
             FileSaveClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void FileSaveAsClickHandler(object sender, EventArgs e)
+        public void FileSaveAsClickHandler(object sender, EventArgs e)
         {
             FileSaveAsClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void ActionChangeRepoPasswordClickHandler(object sender, EventArgs e)
+        public void ActionChangeRepoPasswordClickHandler(object sender, EventArgs e)
         {
             ActionChangeRepoPasswordClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void AddEntryClickHandler(object sender, EventArgs e)
+        public void AddEntryClickHandler(object sender, EventArgs e)
         {
             AddEntryClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void EditEntryClickhandler(object sender, EventArgs e)
+        public void EditEntryClickhandler(object sender, EventArgs e)
         {
             EditEntryClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RemoveEntryClickHandler(object sender, EventArgs e)
+        public void RemoveEntryClickHandler(object sender, EventArgs e)
         {
             RemoveEntryClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void AboutVersionClickHandler(object sender, EventArgs e)
+        public void AboutVersionClickHandler(object sender, EventArgs e)
         {
             new VersionForm().ShowDialog();
         }

@@ -18,7 +18,7 @@ namespace MattsPasswordManager
             MainForm mainForm = new();
             MainModel mainModel = new();
 
-            MainPresenter mainPresenter = new(fileService, mainModel, mainForm);
+            MainPresenter mainPresenter = new(mainForm, mainModel, fileService);
 
             Application.Run(mainForm);
         }
