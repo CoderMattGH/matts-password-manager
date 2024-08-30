@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -62,6 +64,147 @@ public class FileServiceTests
             );
 
             Assert.Equal("An unknown decryption error occurred!", ex.Message);
+        }
+    }
+
+    public class SavePasswordFile : IDisposable
+    {
+        private readonly string _testFilePath;
+
+        public SavePasswordFile()
+        {
+            _testFilePath = Path.GetTempFileName();
+        }
+
+        public void Dispose()
+        {
+            if (File.Exists(_testFilePath))
+            {
+                File.Delete(_testFilePath);
+            }
+        }
+
+        [Fact]
+        public void SaveValidPasswordFile_SavesFile()
+        {
+            string filePath = _testFilePath;
+            string password = "password";
+
+            List<Entry> entries =
+            [
+                new Entry()
+                {
+                    Description = "Test1",
+                    Username = "Matt",
+                    Password = "password"
+                },
+                new Entry()
+                {
+                    Description = "Test2",
+                    Username = "Matt",
+                    Password = "password"
+                }
+            ];
+
+            FileService.SavePasswordFile(filePath, entries, password);
+
+            Assert.True(File.Exists(filePath));
+        }
+
+        [Fact]
+        public void SaveValidPasswordFile_SavesValidFile()
+        {
+            string filePath = _testFilePath;
+            string password = "password";
+
+            List<Entry> entries =
+            [
+                new Entry()
+                {
+                    Description = "Test1",
+                    Username = "Matt",
+                    Password = "password"
+                },
+                new Entry()
+                {
+                    Description = "Test2",
+                    Username = "Matt",
+                    Password = "password"
+                }
+            ];
+
+            FileService.SavePasswordFile(filePath, entries, password);
+            Assert.True(File.Exists(filePath));
+
+            // Try and open file.
+            List<Entry> result = FileService.LoadPasswordFile(filePath, password);
+
+            Assert.True(result.SequenceEqual(result));
+        }
+
+        [Fact]
+        public void SaveToAlreadyExistsFile_SavesFile()
+        {
+            string filePath = _testFilePath;
+            string password = "password";
+
+            List<Entry> entries =
+            [
+                new Entry()
+                {
+                    Description = "Test1",
+                    Username = "Matt",
+                    Password = "password"
+                },
+                new Entry()
+                {
+                    Description = "Test2",
+                    Username = "Matt",
+                    Password = "password"
+                }
+            ];
+
+            // Create file
+            File.WriteAllText(filePath, "TESTING TESTING");
+
+            // Now try and save to file
+            FileService.SavePasswordFile(filePath, entries, password);
+        }
+
+        [Fact]
+        public void SaveToAlreadyOpenFile_ThrowsException()
+        {
+            string filePath = _testFilePath;
+            string password = "password";
+
+            List<Entry> entries =
+            [
+                new Entry()
+                {
+                    Description = "Test1",
+                    Username = "Matt",
+                    Password = "password"
+                },
+                new Entry()
+                {
+                    Description = "Test2",
+                    Username = "Matt",
+                    Password = "password"
+                }
+            ];
+
+            // Create file
+            File.WriteAllText(filePath, "TESTING TESTING");
+
+            // Open file
+            using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            {
+                var exception = Assert.Throws<Exception>(
+                    () => FileService.SavePasswordFile(filePath, entries, password)
+                );
+
+                Assert.Equal("Error saving file!", exception.Message);
+            }
         }
     }
 }
