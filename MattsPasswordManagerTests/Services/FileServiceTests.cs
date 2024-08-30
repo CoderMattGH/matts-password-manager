@@ -13,13 +13,20 @@ public class FileServiceTests
 {
     public class LoadPasswordFileTests
     {
+        private readonly FileService _fileService;
+
+        public LoadPasswordFileTests()
+        {
+            this._fileService = new FileService(new EncryptionService());
+        }
+
         [Fact]
         public void LoadValidPasswordFile_ReturnsEntries()
         {
             string filePath = "TestMPM.mpm";
             string password = "password";
 
-            List<Entry> result = FileService.LoadPasswordFile(filePath, password);
+            List<Entry> result = _fileService.LoadPasswordFile(filePath, password);
 
             Assert.Equal(2, result.Count());
             Assert.Equal("TestEntry1", result[0].Description);
@@ -34,7 +41,7 @@ public class FileServiceTests
             string password = "invalidpassword";
 
             Exception ex = Assert.Throws<Exception>(
-                () => FileService.LoadPasswordFile(filePath, password)
+                () => _fileService.LoadPasswordFile(filePath, password)
             );
 
             Assert.Equal("Incorrect password or file is corrupt!", ex.Message);
@@ -47,7 +54,7 @@ public class FileServiceTests
             string password = "password";
 
             Exception ex = Assert.Throws<Exception>(
-                () => FileService.LoadPasswordFile(filePath, password)
+                () => _fileService.LoadPasswordFile(filePath, password)
             );
 
             Assert.Equal("Error opening file!", ex.Message);
@@ -60,7 +67,7 @@ public class FileServiceTests
             string password = "password";
 
             Exception ex = Assert.Throws<Exception>(
-                () => FileService.LoadPasswordFile(filePath, password)
+                () => _fileService.LoadPasswordFile(filePath, password)
             );
 
             Assert.Equal("An unknown decryption error occurred!", ex.Message);
@@ -70,10 +77,12 @@ public class FileServiceTests
     public class SavePasswordFile : IDisposable
     {
         private readonly string _testFilePath;
+        private readonly FileService _fileService;
 
         public SavePasswordFile()
         {
-            _testFilePath = Path.GetTempFileName();
+            this._fileService = new FileService(new EncryptionService());
+            this._testFilePath = Path.GetTempFileName();
         }
 
         public void Dispose()
@@ -106,7 +115,7 @@ public class FileServiceTests
                 }
             ];
 
-            FileService.SavePasswordFile(filePath, entries, password);
+            _fileService.SavePasswordFile(filePath, entries, password);
 
             Assert.True(File.Exists(filePath));
         }
@@ -133,11 +142,11 @@ public class FileServiceTests
                 }
             ];
 
-            FileService.SavePasswordFile(filePath, entries, password);
+            _fileService.SavePasswordFile(filePath, entries, password);
             Assert.True(File.Exists(filePath));
 
             // Try and open file.
-            List<Entry> result = FileService.LoadPasswordFile(filePath, password);
+            List<Entry> result = _fileService.LoadPasswordFile(filePath, password);
 
             Assert.True(result.SequenceEqual(result));
         }
@@ -168,7 +177,7 @@ public class FileServiceTests
             File.WriteAllText(filePath, "TESTING TESTING");
 
             // Now try and save to file
-            FileService.SavePasswordFile(filePath, entries, password);
+            _fileService.SavePasswordFile(filePath, entries, password);
         }
 
         [Fact]
@@ -200,7 +209,7 @@ public class FileServiceTests
             using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
                 var exception = Assert.Throws<Exception>(
-                    () => FileService.SavePasswordFile(filePath, entries, password)
+                    () => _fileService.SavePasswordFile(filePath, entries, password)
                 );
 
                 Assert.Equal("Error saving file!", exception.Message);

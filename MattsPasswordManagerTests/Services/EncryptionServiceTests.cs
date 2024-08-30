@@ -11,13 +11,20 @@ public class EncryptionServiceTests
 {
     public class EncryptStringTests
     {
+        private EncryptionService _encryptionService;
+
+        public EncryptStringTests()
+        {
+            this._encryptionService = new EncryptionService();
+        }
+
         [Fact]
         public void ValidKey_ReturnsCipherText()
         {
             string plainText = "This is a string to be encrypted";
             string key = "key";
 
-            var result = EncryptionService.EncryptString(plainText, key);
+            var result = _encryptionService.EncryptString(plainText, key);
 
             Assert.NotEmpty(result);
         }
@@ -28,7 +35,7 @@ public class EncryptionServiceTests
             string plainText = "";
             string key = "key";
 
-            var result = EncryptionService.EncryptString(plainText, key);
+            var result = _encryptionService.EncryptString(plainText, key);
 
             Assert.NotEmpty(result);
         }
@@ -39,9 +46,9 @@ public class EncryptionServiceTests
             string plainText = "This is a string to be encrypted";
             string key = "mykey";
 
-            var encResult = EncryptionService.EncryptString(plainText, key);
+            var encResult = _encryptionService.EncryptString(plainText, key);
 
-            var decResult = EncryptionService.DecryptString(encResult, key);
+            var decResult = _encryptionService.DecryptString(encResult, key);
 
             Assert.Equal(plainText, decResult);
         }
@@ -54,7 +61,7 @@ public class EncryptionServiceTests
                 "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
             var exception = Assert.Throws<ArgumentException>(
-                () => EncryptionService.EncryptString(plainText, key)
+                () => _encryptionService.EncryptString(plainText, key)
             );
 
             Assert.Equal("Key must be 16 bytes or less.", exception.Message);
@@ -63,6 +70,13 @@ public class EncryptionServiceTests
 
     public class DecryptStringTests
     {
+        private EncryptionService _encryptionService;
+
+        public DecryptStringTests()
+        {
+            _encryptionService = new EncryptionService();
+        }
+
         [Fact]
         public void ValidKey_ReturnsPlainText()
         {
@@ -70,7 +84,7 @@ public class EncryptionServiceTests
                 "PEgk3u7RmGRnZMY/4R0KZ8Vhd8y5JdZBqAIJ12i+pFEE1CsptuQydK/af35NvsyBv0tNZBHtAzoP4BFwMYSabA==";
             string key = "key";
 
-            var result = EncryptionService.DecryptString(cipherText, key);
+            var result = _encryptionService.DecryptString(cipherText, key);
 
             Assert.Equal("This is a string to be encrypted", result);
         }
@@ -83,7 +97,7 @@ public class EncryptionServiceTests
             string key = "wrongkey";
 
             Assert.Throws<CryptographicException>(
-                () => EncryptionService.DecryptString(cipherText, key)
+                () => _encryptionService.DecryptString(cipherText, key)
             );
         }
 
@@ -96,7 +110,7 @@ public class EncryptionServiceTests
                 "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD";
 
             var exception = Assert.Throws<ArgumentException>(
-                () => EncryptionService.EncryptString(cipherText, key)
+                () => _encryptionService.EncryptString(cipherText, key)
             );
 
             Assert.Equal("Key must be 16 bytes or less.", exception.Message);
