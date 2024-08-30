@@ -21,6 +21,30 @@ namespace MattsPasswordManager.Forms
 
         private void FileNewClickHandler(object sender, EventArgs e)
         {
+            if (_isModified)
+            {
+                DialogResult result = MessageBox.Show(
+                    this,
+                    "Would you like to save any changes to the current file?",
+                    "Question",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    if (!SaveTable())
+                    {
+                        return;
+                    }
+                }
+
+                if (result == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             _openFilePath = "";
             _isModified = false;
             _encPassword = "";
