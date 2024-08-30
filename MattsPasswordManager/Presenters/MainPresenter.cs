@@ -13,32 +13,32 @@ namespace MattsPasswordManager.Presenters
 {
     internal class MainPresenter
     {
-        public MainForm? MainForm { get; set; }
+        private readonly MainForm _mainForm;
+        private readonly FileService _fileService;
+        private readonly MainModel _mainModel;
 
-        private FileService _fileService;
-        private MainModel _mainModel;
-
-        public MainPresenter(FileService fileService, MainModel mainModel)
+        public MainPresenter(FileService fileService, MainModel mainModel, MainForm mainForm)
         {
             this._fileService = fileService;
             this._mainModel = mainModel;
+            this._mainForm = mainForm;
+
+            _mainForm.CloseButtonClick += ProcessCloseApp;
+            _mainForm.FileNewClick += NewRepo;
+            _mainForm.FileLoadClick += LoadRepo;
+            _mainForm.FileSaveClick += SaveRepo;
+            _mainForm.FileSaveAsClick += SaveRepo;
+            _mainForm.ActionChangeRepoPasswordClick += ChangeRepoPassword;
+            _mainForm.AddEntryClick += AddEntry;
+            _mainForm.EditEntryClick += EditEntry;
+            _mainForm.RemoveEntryClick += RemoveEntry;
         }
 
-        public void CheckMainFormSet()
+        public void NewRepo(object? sender, EventArgs e)
         {
-            if (MainForm == null)
-            {
-                throw new InvalidOperationException("MainForm view has not been set!");
-            }
-        }
-
-        public void NewRepo()
-        {
-            CheckMainFormSet();
-
             if (_mainModel.IsModified)
             {
-                DialogResult result = MainForm.ShowConfirmationDialog(
+                DialogResult result = _mainForm.ShowConfirmationDialog(
                     "Would you like to save any changes to the current file?"
                 );
 
@@ -60,14 +60,12 @@ namespace MattsPasswordManager.Presenters
             _mainModel.IsModified = false;
             _mainModel.EncPassword = "";
 
-            MainForm.ClearTable();
+            _mainForm.ClearTable();
         }
 
-        public void LoadRepo()
+        public void LoadRepo(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
-
-            String? filePath = MainForm.ShowOpenFileDialog();
+            String? filePath = _mainForm.ShowOpenFileDialog();
 
             if (filePath == null)
             {
@@ -76,7 +74,7 @@ namespace MattsPasswordManager.Presenters
 
             // Get repo password
             EncPassword encPassword = new();
-            DialogResult result = MainForm.ShowEnterEncPasswordForm(encPassword);
+            DialogResult result = _mainForm.ShowEnterEncPasswordForm(encPassword);
 
             if (result != DialogResult.OK)
             {
@@ -84,7 +82,7 @@ namespace MattsPasswordManager.Presenters
             }
 
             // Clear the table
-            MainForm.ClearTable();
+            _mainForm.ClearTable();
 
             List<Entry> data;
             try
@@ -93,14 +91,14 @@ namespace MattsPasswordManager.Presenters
             }
             catch (Exception ex)
             {
-                MainForm.ShowErrorDialog(ex.Message);
+                _mainForm.ShowErrorDialog(ex.Message);
 
                 return;
             }
 
             foreach (Entry entry in data)
             {
-                MainForm.AddEntryToTable(entry);
+                _mainForm.AddEntryToTable(entry);
             }
 
             _mainModel.IsModified = false;
@@ -108,30 +106,29 @@ namespace MattsPasswordManager.Presenters
             _mainModel.OpenFilePath = filePath;
         }
 
-        public void SaveRepo(bool forceSave = false)
+        public void SaveRepo(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
-
-            ProcessSaveRepo(forceSave);
+            ProcessSaveRepo(false);
         }
 
-        public void ProcessCloseApp(FormClosingEventArgs? e = null)
+        public void SaveAsRepo(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
+            ProcessSaveRepo(true);
+        }
 
+        public void ProcessCloseApp(object? sender, FormClosingEventArgs e)
+        {
             if (!CloseAppPrep() && e != null)
             {
                 e.Cancel = true;
             }
         }
 
-        public void ChangeRepoPassword()
+        public void ChangeRepoPassword(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
-
             EncPassword encPassword = new();
 
-            DialogResult result = MainForm.ShowEditEncPasswordForm(encPassword);
+            DialogResult result = _mainForm.ShowEditEncPasswordForm(encPassword);
 
             if (result != DialogResult.OK)
             {
@@ -142,32 +139,28 @@ namespace MattsPasswordManager.Presenters
             _mainModel.IsModified = true;
         }
 
-        public void AddEntry()
+        public void AddEntry(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
-
             Entry entry = new();
 
-            DialogResult result = MainForm.ShowAddEntryForm(entry);
+            DialogResult result = _mainForm.ShowAddEntryForm(entry);
 
             if (result != DialogResult.OK)
             {
                 return;
             }
 
-            MainForm.AddEntryToTable(entry);
+            _mainForm.AddEntryToTable(entry);
             _mainModel.IsModified = true;
         }
 
-        public void EditEntry()
+        public void EditEntry(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
-
-            DataGridViewRow row = MainForm.GetSelectedRow();
+            DataGridViewRow row = _mainForm.GetSelectedRow();
 
             if (row == null)
             {
-                MainForm.ShowErrorDialog("No row selected!");
+                _mainForm.ShowErrorDialog("No row selected!");
 
                 return;
             }
@@ -184,7 +177,7 @@ namespace MattsPasswordManager.Presenters
                     Password = password
                 };
 
-            DialogResult result = MainForm.ShowEditEntryForm(entry);
+            DialogResult result = _mainForm.ShowEditEntryForm(entry);
 
             if (result != DialogResult.OK)
             {
@@ -199,27 +192,25 @@ namespace MattsPasswordManager.Presenters
             _mainModel.IsModified = true;
         }
 
-        public void RemoveEntry()
+        public void RemoveEntry(object? sender, EventArgs e)
         {
-            CheckMainFormSet();
-
-            DataGridViewRow row = MainForm.GetSelectedRow();
+            DataGridViewRow row = _mainForm.GetSelectedRow();
 
             if (row == null)
             {
-                MainForm.ShowErrorDialog("No row selected!");
+                _mainForm.ShowErrorDialog("No row selected!");
 
                 return;
             }
 
             // Confirm delete
-            DialogResult result = MainForm.ShowConfirmationDialog(
+            DialogResult result = _mainForm.ShowConfirmationDialog(
                 "Are you sure you want to remove this entry?"
             );
 
             if (result == DialogResult.Yes)
             {
-                MainForm.RemoveEntryInTable(row.Index);
+                _mainForm.RemoveEntryInTable(row.Index);
                 _mainModel.IsModified = true;
             }
         }
@@ -228,7 +219,7 @@ namespace MattsPasswordManager.Presenters
         {
             if (_mainModel.IsModified)
             {
-                DialogResult result = MainForm.ShowConfirmationDialog(
+                DialogResult result = _mainForm.ShowConfirmationDialog(
                     "Would you like to save any changes before you exit?"
                 );
 
@@ -248,7 +239,7 @@ namespace MattsPasswordManager.Presenters
                     }
                     catch (Exception ex)
                     {
-                        MainForm.ShowErrorDialog(ex.Message);
+                        _mainForm.ShowErrorDialog(ex.Message);
 
                         return false;
                     }
@@ -264,7 +255,7 @@ namespace MattsPasswordManager.Presenters
             {
                 EncPassword encPassword = new();
 
-                if (MainForm.ShowAddEncPasswordForm(encPassword) != DialogResult.OK)
+                if (_mainForm.ShowAddEncPasswordForm(encPassword) != DialogResult.OK)
                 {
                     return false;
                 }
@@ -272,12 +263,12 @@ namespace MattsPasswordManager.Presenters
                 _mainModel.EncPassword = encPassword.Password;
             }
 
-            List<Entry> entries = MainForm.GetTableEntries();
+            List<Entry> entries = _mainForm.GetTableEntries();
 
             string? filePath = null;
             if (_mainModel.OpenFilePath == "" || forceSaveToNewFile)
             {
-                filePath = MainForm.ShowSaveFileDialog();
+                filePath = _mainForm.ShowSaveFileDialog();
 
                 if (filePath == null)
                 {
@@ -295,7 +286,7 @@ namespace MattsPasswordManager.Presenters
             }
             catch (Exception)
             {
-                MainForm.ShowErrorDialog("Error saving file!");
+                _mainForm.ShowErrorDialog("Error saving file!");
 
                 return false;
             }

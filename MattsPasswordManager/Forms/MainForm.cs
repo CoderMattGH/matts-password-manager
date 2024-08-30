@@ -9,18 +9,26 @@ namespace MattsPasswordManager.Forms
     {
         public static readonly string FILE_EXT_FILTER = "MPM Files (*.mpm)|*.mpm";
 
-        private readonly MainPresenter _mainPresenter;
+        public event EventHandler? FileNewClick,
+            FileLoadClick,
+            FileSaveClick,
+            FileSaveAsClick,
+            ActionChangeRepoPasswordClick,
+            AddEntryClick,
+            EditEntryClick,
+            RemoveEntryClick;
 
-        public MainForm(MainPresenter mainPresenter)
+        public event FormClosingEventHandler? CloseButtonClick;
+
+        public MainForm()
         {
-            this._mainPresenter = mainPresenter;
             this.Icon = new Icon("MPM.ico");
             InitializeComponent();
         }
 
         private void FileNewClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter.NewRepo();
+            FileNewClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void FileExitClickHandler(object sender, EventArgs e)
@@ -30,42 +38,42 @@ namespace MattsPasswordManager.Forms
 
         private void CloseButtonHandler(object sender, FormClosingEventArgs e)
         {
-            _mainPresenter.ProcessCloseApp(e);
+            CloseButtonClick?.Invoke(this, e);
         }
 
         private void FileLoadClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter.LoadRepo();
+            FileLoadClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void FileSaveClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter?.SaveRepo();
+            FileSaveClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void FileSaveAsClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter.SaveRepo(true);
+            FileSaveAsClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void ActionChangeRepoPasswordClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter.ChangeRepoPassword();
+            ActionChangeRepoPasswordClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void AddEntryClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter.AddEntry();
+            AddEntryClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void EditEntryClickhandler(object sender, EventArgs e)
         {
-            _mainPresenter.EditEntry();
+            EditEntryClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void RemoveEntryClickHandler(object sender, EventArgs e)
         {
-            _mainPresenter.RemoveEntry();
+            RemoveEntryClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void AboutVersionClickHandler(object sender, EventArgs e)
