@@ -12,15 +12,13 @@ namespace MattsPasswordManager
         {
             ApplicationConfiguration.Initialize();
 
-            EncryptionService encryptionService = new EncryptionService();
+            EncryptionService encryptionService = new();
             FileService fileService = new(encryptionService);
 
+            MainForm mainForm = new();
             MainModel mainModel = new();
 
-            MainPresenter mainPresenter = new(fileService, mainModel);
-            MainForm mainForm = new(mainPresenter);
-
-            mainPresenter.MainForm = mainForm;
+            MainPresenter mainPresenter = new(fileService, mainModel, mainForm);
 
             Application.Run(mainForm);
         }
