@@ -14,11 +14,16 @@ namespace MattsPasswordManager.Forms
 {
     internal partial class EditEntryForm : Form
     {
-        private readonly Entry entry;
+        private readonly Entry _entry;
+        private readonly List<Entry> _entries;
+        private readonly int _rowIndex;
 
-        public EditEntryForm(Entry entry)
+        public EditEntryForm(Entry entry, List<Entry> entries, int rowIndex)
         {
-            this.entry = entry;
+            this._entry = entry;
+            this._entries = entries;
+            this._rowIndex = rowIndex;
+
             InitializeComponent();
 
             // Set current values
@@ -76,13 +81,42 @@ namespace MattsPasswordManager.Forms
                 return;
             }
 
+            // Check that entry does not already exist
+            for (int i = 0; i < _entries.Count; i++)
+            {
+                if (
+                    this._rowIndex != i
+                    && String.Equals(
+                        this._entries[i].Description,
+                        descriptionTextBox.Text.Trim(),
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    && String.Equals(
+                        this._entries[i].Username,
+                        usernameTextBox.Text.ToLower(),
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+                {
+                    MessageBox.Show(
+                        this,
+                        "A similar entry already exists!",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+
+                    return;
+                }
+            }
+
             // Validation OK
             this.DialogResult = DialogResult.OK;
             this.Close();
 
-            entry.Description = descriptionTextBox.Text.Trim();
-            entry.Username = usernameTextBox.Text.Trim();
-            entry.Password = passwordTextBox.Text.Trim();
+            _entry.Description = descriptionTextBox.Text.Trim();
+            _entry.Username = usernameTextBox.Text.Trim();
+            _entry.Password = passwordTextBox.Text.Trim();
         }
 
         private void CancelButtonClickHandler(object sender, EventArgs e)

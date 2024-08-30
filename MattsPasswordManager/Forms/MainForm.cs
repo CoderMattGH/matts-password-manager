@@ -133,16 +133,16 @@ namespace MattsPasswordManager.Forms
             return openFileDialog.FileName;
         }
 
-        public DialogResult ShowAddEntryForm(Entry entry)
+        public DialogResult ShowAddEntryForm(Entry entry, List<Entry> entries)
         {
-            AddEntryForm addEntryForm = new(entry);
+            AddEntryForm addEntryForm = new(entry, entries);
 
             return addEntryForm.ShowDialog();
         }
 
-        public DialogResult ShowEditEntryForm(Entry entry)
+        public DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries, int rowIndex)
         {
-            EditEntryForm editEntryForm = new(entry);
+            EditEntryForm editEntryForm = new(entry, entries, rowIndex);
 
             return editEntryForm.ShowDialog();
         }

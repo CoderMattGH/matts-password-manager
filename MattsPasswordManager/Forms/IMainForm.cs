@@ -28,8 +28,8 @@ internal interface IMainForm
     void ShowErrorDialog(string message);
     string? ShowSaveFileDialog();
     string? ShowOpenFileDialog();
-    DialogResult ShowAddEntryForm(Entry entry);
-    DialogResult ShowEditEntryForm(Entry entry);
+    DialogResult ShowAddEntryForm(Entry entry, List<Entry> entries);
+    DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries, int rowIndex);
     DialogResult ShowEditEncPasswordForm(EncPassword encPassword);
     DialogResult ShowAddEncPasswordForm(EncPassword encPassword);
     DialogResult ShowEnterEncPasswordForm(EncPassword encPassword);

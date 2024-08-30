@@ -14,11 +14,14 @@ namespace MattsPasswordManager.Forms
 {
     internal partial class AddEntryForm : Form
     {
-        private readonly Entry entry;
+        private readonly Entry _entry;
+        private readonly List<Entry> _entries;
 
-        public AddEntryForm(Entry entry)
+        public AddEntryForm(Entry entry, List<Entry> entries)
         {
-            this.entry = entry;
+            this._entry = entry;
+            this._entries = entries;
+
             InitializeComponent();
         }
 
@@ -71,13 +74,41 @@ namespace MattsPasswordManager.Forms
                 return;
             }
 
+            // Check that entry does not already exist
+            foreach (Entry entry in _entries)
+            {
+                if (
+                    String.Equals(
+                        entry.Description,
+                        descriptionTextBox.Text.Trim(),
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                    && String.Equals(
+                        entry.Username,
+                        usernameTextBox.Text.ToLower(),
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+                {
+                    MessageBox.Show(
+                        this,
+                        "A similar entry already exists!",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+
+                    return;
+                }
+            }
+
             // Validation OK
             this.DialogResult = DialogResult.OK;
             this.Close();
 
-            entry.Description = descriptionTextBox.Text.Trim();
-            entry.Username = usernameTextBox.Text.Trim();
-            entry.Password = passwordTextBox.Text.Trim();
+            _entry.Description = descriptionTextBox.Text.Trim();
+            _entry.Username = usernameTextBox.Text.Trim();
+            _entry.Password = passwordTextBox.Text.Trim();
         }
 
         private void CancelButtonClickHandler(object sender, EventArgs e)

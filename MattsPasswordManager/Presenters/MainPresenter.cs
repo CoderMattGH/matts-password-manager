@@ -143,7 +143,9 @@ namespace MattsPasswordManager.Presenters
         {
             Entry entry = new();
 
-            DialogResult result = _mainForm.ShowAddEntryForm(entry);
+            List<Entry> entries = _mainForm.GetTableEntries();
+
+            DialogResult result = _mainForm.ShowAddEntryForm(entry, entries);
 
             if (result != DialogResult.OK)
             {
@@ -177,7 +179,9 @@ namespace MattsPasswordManager.Presenters
                     Password = password
                 };
 
-            DialogResult result = _mainForm.ShowEditEntryForm(entry);
+            List<Entry> entries = _mainForm.GetTableEntries();
+
+            DialogResult result = _mainForm.ShowEditEntryForm(entry, entries, row.Index);
 
             if (result != DialogResult.OK)
             {

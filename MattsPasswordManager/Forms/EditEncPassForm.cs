@@ -24,8 +24,8 @@ namespace MattsPasswordManager.Forms
 
         private void OKButtonHandler(object sender, EventArgs e)
         {
-            string password = passwordTextBox.Text.Trim();
-            string confPassword = confPasswordTextBox.Text.Trim();
+            string password = passwordTextBox.Text;
+            string confPassword = confPasswordTextBox.Text;
 
             ValidationObj passValObj = EncPasswordValidator.ValidateEncPassword(password);
             if (!passValObj.IsValid)
