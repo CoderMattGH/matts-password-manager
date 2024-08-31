@@ -38,4 +38,5 @@ internal interface IMainForm
     void AddEntryToTable(Entry entry);
     void RemoveEntryInTable(int index);
     void ClearTable();
+    void UpdateFilename(string filename);
 }

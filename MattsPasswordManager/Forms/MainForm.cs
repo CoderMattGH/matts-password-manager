@@ -214,5 +214,17 @@ namespace MattsPasswordManager.Forms
         {
             passwordTable.Rows.Clear();
         }
+
+        public void UpdateFilename(string filename)
+        {
+            string title = "Matts Password Manager";
+
+            if (filename != "")
+            {
+                title += $" [{filename}]";
+            }
+
+            this.Text = title;
+        }
     }
 }

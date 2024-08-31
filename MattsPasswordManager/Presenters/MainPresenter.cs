@@ -59,6 +59,7 @@ namespace MattsPasswordManager.Presenters
             _mainModel.OpenFilePath = "";
             _mainModel.IsModified = false;
             _mainModel.EncPassword = "";
+            _mainForm.UpdateFilename("");
 
             _mainForm.ClearTable();
         }
@@ -104,6 +105,7 @@ namespace MattsPasswordManager.Presenters
             _mainModel.IsModified = false;
             _mainModel.EncPassword = encPassword.Password;
             _mainModel.OpenFilePath = filePath;
+            _mainForm.UpdateFilename(Path.GetFileName(filePath));
         }
 
         public void SaveRepo(object? sender, EventArgs e)
@@ -300,6 +302,7 @@ namespace MattsPasswordManager.Presenters
             if (filePath != null)
             {
                 _mainModel.OpenFilePath = filePath;
+                _mainForm.UpdateFilename(Path.GetFileName(filePath));
             }
 
             return true;
