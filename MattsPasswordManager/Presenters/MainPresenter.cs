@@ -172,6 +172,13 @@ namespace MattsPasswordManager.Presenters
 
             Entry? rowEntry = row.Tag as Entry;
 
+            if (rowEntry == null)
+            {
+                _mainForm.ShowErrorDialog("Error editing entry!");
+
+                return;
+            }
+
             List<Entry> entries = _mainModel.Entries;
 
             DialogResult result = _mainForm.ShowEditEntryForm(rowEntry, entries);
@@ -203,6 +210,13 @@ namespace MattsPasswordManager.Presenters
             );
 
             Entry? rowEntry = row.Tag as Entry;
+
+            if (rowEntry == null)
+            {
+                _mainForm.ShowErrorDialog("Error deleting row!");
+
+                return;
+            }
 
             if (result == DialogResult.Yes)
             {

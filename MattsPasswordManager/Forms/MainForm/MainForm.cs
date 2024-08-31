@@ -1,5 +1,6 @@
 using MattsPasswordManager.DTOs;
 using MattsPasswordManager.Forms;
+using MattsPasswordManager.Models;
 using MattsPasswordManager.Presenters;
 using MattsPasswordManager.Services;
 
