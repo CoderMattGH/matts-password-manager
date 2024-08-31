@@ -16,13 +16,11 @@ namespace MattsPasswordManager.Forms
     {
         private readonly Entry _entry;
         private readonly List<Entry> _entries;
-        private readonly int _rowIndex;
 
-        public EditEntryForm(Entry entry, List<Entry> entries, int rowIndex)
+        public EditEntryForm(Entry entry, List<Entry> entries)
         {
             this._entry = entry;
             this._entries = entries;
-            this._rowIndex = rowIndex;
 
             InitializeComponent();
 
@@ -82,11 +80,11 @@ namespace MattsPasswordManager.Forms
             }
 
             // Check that entry does not already exist
+            // TODO: Duplicates
             for (int i = 0; i < _entries.Count; i++)
             {
                 if (
-                    this._rowIndex != i
-                    && String.Equals(
+                    String.Equals(
                         this._entries[i].Description,
                         descriptionTextBox.Text.Trim(),
                         StringComparison.OrdinalIgnoreCase

@@ -32,6 +32,7 @@ namespace MattsPasswordManager.Presenters
             _mainForm.AddEntryClick += AddEntry;
             _mainForm.EditEntryClick += EditEntry;
             _mainForm.RemoveEntryClick += RemoveEntry;
+            _mainForm.SearchBoxType += FilterSearchResults;
         }
 
         public void NewRepo(object? sender, EventArgs e)
@@ -59,9 +60,10 @@ namespace MattsPasswordManager.Presenters
             _mainModel.OpenFilePath = "";
             _mainModel.IsModified = false;
             _mainModel.EncPassword = "";
+            _mainModel.ClearEntries();
             _mainForm.UpdateFilename("");
 
-            _mainForm.ClearTable();
+            _mainForm.SetTable(_mainModel.Entries);
         }
 
         public void LoadRepo(object? sender, EventArgs e)
@@ -94,13 +96,10 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            // Clear the table
-            _mainForm.ClearTable();
+            _mainModel.ClearEntries();
 
-            foreach (Entry entry in data)
-            {
-                _mainForm.AddEntryToTable(entry);
-            }
+            _mainModel.Entries = data;
+            _mainForm.SetTable(data);
 
             _mainModel.IsModified = false;
             _mainModel.EncPassword = encPassword.Password;
@@ -145,8 +144,7 @@ namespace MattsPasswordManager.Presenters
         {
             Entry entry = new();
 
-            List<Entry> entries = _mainForm.GetTableEntries();
-
+            List<Entry> entries = _mainModel.Entries;
             DialogResult result = _mainForm.ShowAddEntryForm(entry, entries);
 
             if (result != DialogResult.OK)
@@ -154,8 +152,10 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            _mainForm.AddEntryToTable(entry);
+            _mainModel.AddEntry(entry);
             _mainModel.IsModified = true;
+
+            FilterSearchResults();
         }
 
         public void EditEntry(object? sender, EventArgs e)
@@ -169,31 +169,18 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            string description = row.Cells[0].Value.ToString() ?? "";
-            string username = row.Cells[1].Value.ToString() ?? "";
-            string password = row.Cells[2].Value.ToString() ?? "";
+            Entry? rowEntry = row.Tag as Entry;
 
-            Entry entry =
-                new()
-                {
-                    Description = description,
-                    Username = username,
-                    Password = password
-                };
+            List<Entry> entries = _mainModel.Entries;
 
-            List<Entry> entries = _mainForm.GetTableEntries();
-
-            DialogResult result = _mainForm.ShowEditEntryForm(entry, entries, row.Index);
+            DialogResult result = _mainForm.ShowEditEntryForm(rowEntry, entries);
 
             if (result != DialogResult.OK)
             {
                 return;
             }
 
-            // Update row
-            row.Cells[0].Value = entry.Description;
-            row.Cells[1].Value = entry.Username;
-            row.Cells[2].Value = entry.Password;
+            FilterSearchResults();
 
             _mainModel.IsModified = true;
         }
@@ -214,11 +201,36 @@ namespace MattsPasswordManager.Presenters
                 "Are you sure you want to remove this entry?"
             );
 
+            Entry? rowEntry = row.Tag as Entry;
+
             if (result == DialogResult.Yes)
             {
-                _mainForm.RemoveEntryInTable(row.Index);
+                _mainModel.RemoveEntry(rowEntry);
                 _mainModel.IsModified = true;
+
+                FilterSearchResults();
             }
+        }
+
+        public void FilterSearchResults(object? sender, EventArgs e)
+        {
+            FilterSearchResults();
+        }
+
+        public void FilterSearchResults()
+        {
+            // Get text from search box
+            string searchString = _mainForm.GetSearchBoxText();
+
+            // Filter results
+            List<Entry> filteredEntries = _mainModel
+                .Entries.Where(e =>
+                    e.Description != null
+                    && e.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                )
+                .ToList();
+
+            _mainForm.SetTable(filteredEntries);
         }
 
         private bool CloseAppPrep()
@@ -269,7 +281,7 @@ namespace MattsPasswordManager.Presenters
                 _mainModel.EncPassword = encPassword.Password;
             }
 
-            List<Entry> entries = _mainForm.GetTableEntries();
+            List<Entry> entries = _mainModel.Entries;
 
             string? filePath = null;
             if (_mainModel.OpenFilePath == "" || forceSaveToNewFile)

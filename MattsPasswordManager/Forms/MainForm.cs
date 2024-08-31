@@ -16,7 +16,8 @@ namespace MattsPasswordManager.Forms
             ActionChangeRepoPasswordClick,
             AddEntryClick,
             EditEntryClick,
-            RemoveEntryClick;
+            RemoveEntryClick,
+            SearchBoxType;
 
         public event FormClosingEventHandler? CloseButtonClick;
 
@@ -81,6 +82,11 @@ namespace MattsPasswordManager.Forms
             new VersionForm().ShowDialog();
         }
 
+        public void SearchBoxTypeHandler(object sender, EventArgs e)
+        {
+            SearchBoxType?.Invoke(this, EventArgs.Empty);
+        }
+
         public DialogResult ShowConfirmationDialog(string message)
         {
             DialogResult result = MessageBox.Show(
@@ -140,9 +146,9 @@ namespace MattsPasswordManager.Forms
             return addEntryForm.ShowDialog();
         }
 
-        public DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries, int rowIndex)
+        public DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries)
         {
-            EditEntryForm editEntryForm = new(entry, entries, rowIndex);
+            EditEntryForm editEntryForm = new(entry, entries);
 
             return editEntryForm.ShowDialog();
         }
@@ -168,33 +174,6 @@ namespace MattsPasswordManager.Forms
             return enterPasswordForm.ShowDialog();
         }
 
-        public List<Entry> GetTableEntries()
-        {
-            // Convert all the table entrys to Entry objects
-            List<Entry> entries = [];
-
-            for (int i = 0; i < passwordTable.Rows.Count; i++)
-            {
-                DataGridViewRow row = passwordTable.Rows[i];
-
-                string description = row.Cells[0].Value.ToString() ?? "";
-                string username = row.Cells[1].Value.ToString() ?? "";
-                string password = row.Cells[2].Value.ToString() ?? "";
-
-                Entry entry =
-                    new()
-                    {
-                        Description = description,
-                        Username = username,
-                        Password = password
-                    };
-
-                entries.Add(entry);
-            }
-
-            return entries;
-        }
-
         public DataGridViewRow GetSelectedRow()
         {
             return passwordTable.CurrentRow;
@@ -202,12 +181,27 @@ namespace MattsPasswordManager.Forms
 
         public void AddEntryToTable(Entry entry)
         {
-            passwordTable.Rows.Add(entry.Description, entry.Username, entry.Password);
+            int rowIndex = passwordTable.Rows.Add(
+                entry.Description,
+                entry.Username,
+                entry.Password
+            );
+            passwordTable.Rows[rowIndex].Tag = entry;
         }
 
         public void RemoveEntryInTable(int index)
         {
             passwordTable.Rows.RemoveAt(index);
+        }
+
+        public void SetTable(List<Entry> entries)
+        {
+            ClearTable();
+
+            foreach (Entry entry in entries)
+            {
+                AddEntryToTable(entry);
+            }
         }
 
         public void ClearTable()
@@ -225,6 +219,11 @@ namespace MattsPasswordManager.Forms
             }
 
             this.Text = title;
+        }
+
+        public string GetSearchBoxText()
+        {
+            return searchBox.Text;
         }
     }
 }
