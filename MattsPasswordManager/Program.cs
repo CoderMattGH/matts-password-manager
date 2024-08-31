@@ -10,7 +10,9 @@ namespace MattsPasswordManager
         [STAThread]
         static void Main()
         {
-            ApplicationConfiguration.Initialize();
+            // Application configuration and initialization
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
             EncryptionService encryptionService = new();
             FileService fileService = new(encryptionService);

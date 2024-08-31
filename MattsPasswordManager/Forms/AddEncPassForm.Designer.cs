@@ -58,6 +58,7 @@
             // 
             // passwordTextBox
             // 
+            passwordTextBox.BorderStyle = BorderStyle.FixedSingle;
             passwordTextBox.Location = new Point(127, 80);
             passwordTextBox.Name = "passwordTextBox";
             passwordTextBox.Size = new Size(312, 23);
@@ -66,6 +67,7 @@
             // 
             // confPasswordTextBox
             // 
+            confPasswordTextBox.BorderStyle = BorderStyle.FixedSingle;
             confPasswordTextBox.Location = new Point(127, 119);
             confPasswordTextBox.Name = "confPasswordTextBox";
             confPasswordTextBox.Size = new Size(312, 23);
@@ -115,6 +117,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Window;
             ClientSize = new Size(460, 227);
             Controls.Add(warningLabel);
             Controls.Add(titleLabel);

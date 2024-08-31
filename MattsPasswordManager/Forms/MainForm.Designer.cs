@@ -41,6 +41,7 @@
             versionToolStripMenuItem = new ToolStripMenuItem();
             searchBox = new TextBox();
             searchLabel = new Label();
+            menuBorderPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)passwordTable).BeginInit();
             mainMenuStrip.SuspendLayout();
             SuspendLayout();
@@ -51,16 +52,17 @@
             passwordTable.AllowUserToDeleteRows = false;
             passwordTable.AllowUserToResizeColumns = false;
             passwordTable.AllowUserToResizeRows = false;
+            passwordTable.BorderStyle = BorderStyle.None;
             passwordTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             passwordTable.Columns.AddRange(new DataGridViewColumn[] { Description, Username, Password });
-            passwordTable.Location = new Point(0, 56);
+            passwordTable.Location = new Point(0, 65);
             passwordTable.MultiSelect = false;
             passwordTable.Name = "passwordTable";
             passwordTable.ReadOnly = true;
             passwordTable.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             passwordTable.ScrollBars = ScrollBars.Vertical;
             passwordTable.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            passwordTable.Size = new Size(943, 596);
+            passwordTable.Size = new Size(946, 598);
             passwordTable.TabIndex = 0;
             // 
             // Description
@@ -92,9 +94,9 @@
             // 
             // addButton
             // 
-            addButton.Location = new Point(12, 658);
+            addButton.Location = new Point(4, 669);
             addButton.Name = "addButton";
-            addButton.Size = new Size(300, 60);
+            addButton.Size = new Size(308, 60);
             addButton.TabIndex = 1;
             addButton.Text = "Add";
             addButton.UseVisualStyleBackColor = true;
@@ -102,9 +104,9 @@
             // 
             // removeButton
             // 
-            removeButton.Location = new Point(631, 658);
+            removeButton.Location = new Point(634, 669);
             removeButton.Name = "removeButton";
-            removeButton.Size = new Size(300, 60);
+            removeButton.Size = new Size(308, 60);
             removeButton.TabIndex = 2;
             removeButton.Text = "Remove";
             removeButton.UseVisualStyleBackColor = true;
@@ -112,9 +114,9 @@
             // 
             // editButton
             // 
-            editButton.Location = new Point(322, 658);
+            editButton.Location = new Point(320, 669);
             editButton.Name = "editButton";
-            editButton.Size = new Size(300, 60);
+            editButton.Size = new Size(308, 60);
             editButton.TabIndex = 3;
             editButton.Text = "Edit";
             editButton.UseVisualStyleBackColor = true;
@@ -122,10 +124,11 @@
             // 
             // mainMenuStrip
             // 
+            mainMenuStrip.BackColor = SystemColors.MenuBar;
             mainMenuStrip.Items.AddRange(new ToolStripItem[] { fileMenuStripItem, actionsToolStripMenuItem, aboutToolStripMenuItem });
             mainMenuStrip.Location = new Point(0, 0);
             mainMenuStrip.Name = "mainMenuStrip";
-            mainMenuStrip.Size = new Size(943, 24);
+            mainMenuStrip.Size = new Size(946, 24);
             mainMenuStrip.TabIndex = 4;
             mainMenuStrip.Text = "mainMenuStrip";
             // 
@@ -205,34 +208,47 @@
             // 
             // searchBox
             // 
-            searchBox.Location = new Point(63, 27);
+            searchBox.BorderStyle = BorderStyle.FixedSingle;
+            searchBox.Location = new Point(59, 34);
             searchBox.Name = "searchBox";
-            searchBox.Size = new Size(868, 23);
+            searchBox.Size = new Size(877, 23);
             searchBox.TabIndex = 5;
             searchBox.TextChanged += SearchBoxTypeHandler;
             // 
             // searchLabel
             // 
             searchLabel.AutoSize = true;
-            searchLabel.Location = new Point(12, 30);
+            searchLabel.Location = new Point(8, 38);
             searchLabel.Name = "searchLabel";
             searchLabel.Size = new Size(45, 15);
             searchLabel.TabIndex = 6;
             searchLabel.Text = "Search:";
             // 
+            // menuBorderPanel
+            // 
+            menuBorderPanel.BorderStyle = BorderStyle.FixedSingle;
+            menuBorderPanel.ForeColor = SystemColors.ControlDark;
+            menuBorderPanel.Location = new Point(-10, 24);
+            menuBorderPanel.Margin = new Padding(1);
+            menuBorderPanel.Name = "menuBorderPanel";
+            menuBorderPanel.Size = new Size(958, 1);
+            menuBorderPanel.TabIndex = 7;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(943, 723);
-            Controls.Add(searchLabel);
-            Controls.Add(searchBox);
+            BackColor = SystemColors.Window;
+            ClientSize = new Size(946, 733);
+            Controls.Add(menuBorderPanel);
             Controls.Add(editButton);
-            Controls.Add(removeButton);
             Controls.Add(addButton);
+            Controls.Add(searchLabel);
+            Controls.Add(removeButton);
             Controls.Add(passwordTable);
+            Controls.Add(searchBox);
             Controls.Add(mainMenuStrip);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             MainMenuStrip = mainMenuStrip;
             MaximizeBox = false;
             Name = "MainForm";
@@ -267,5 +283,6 @@
         private DataGridViewTextBoxColumn Password;
         private TextBox searchBox;
         private Label searchLabel;
+        private Panel menuBorderPanel;
     }
 }
