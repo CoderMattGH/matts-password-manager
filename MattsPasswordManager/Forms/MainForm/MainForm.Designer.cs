@@ -97,7 +97,7 @@
             addButton.Location = new Point(4, 669);
             addButton.Name = "addButton";
             addButton.Size = new Size(308, 60);
-            addButton.TabIndex = 1;
+            addButton.TabIndex = 2;
             addButton.Text = "Add";
             addButton.UseVisualStyleBackColor = true;
             addButton.Click += AddEntryClickHandler;
@@ -107,7 +107,7 @@
             removeButton.Location = new Point(634, 669);
             removeButton.Name = "removeButton";
             removeButton.Size = new Size(308, 60);
-            removeButton.TabIndex = 2;
+            removeButton.TabIndex = 4;
             removeButton.Text = "Remove";
             removeButton.UseVisualStyleBackColor = true;
             removeButton.Click += RemoveEntryClickHandler;
@@ -212,7 +212,7 @@
             searchBox.Location = new Point(59, 34);
             searchBox.Name = "searchBox";
             searchBox.Size = new Size(877, 23);
-            searchBox.TabIndex = 5;
+            searchBox.TabIndex = 1;
             searchBox.TextChanged += SearchBoxTypeHandler;
             // 
             // searchLabel

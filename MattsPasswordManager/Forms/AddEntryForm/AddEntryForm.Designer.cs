@@ -98,6 +98,7 @@
             okButton.Text = "OK";
             okButton.UseVisualStyleBackColor = true;
             okButton.Click += OKButtonClickHandler;
+
             // 
             // cancelButton
             // 
