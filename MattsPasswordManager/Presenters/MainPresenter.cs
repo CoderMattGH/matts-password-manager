@@ -27,7 +27,7 @@ namespace MattsPasswordManager.Presenters
             _mainForm.FileNewClick += NewRepo;
             _mainForm.FileLoadClick += LoadRepo;
             _mainForm.FileSaveClick += SaveRepo;
-            _mainForm.FileSaveAsClick += SaveRepo;
+            _mainForm.FileSaveAsClick += SaveAsRepo;
             _mainForm.ActionChangeRepoPasswordClick += ChangeRepoPassword;
             _mainForm.AddEntryClick += AddEntry;
             _mainForm.EditEntryClick += EditEntry;
