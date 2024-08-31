@@ -81,9 +81,6 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            // Clear the table
-            _mainForm.ClearTable();
-
             List<Entry> data;
             try
             {
@@ -95,6 +92,9 @@ namespace MattsPasswordManager.Presenters
 
                 return;
             }
+
+            // Clear the table
+            _mainForm.ClearTable();
 
             foreach (Entry entry in data)
             {
