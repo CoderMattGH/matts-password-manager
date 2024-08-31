@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using MattsPasswordManager.DTOs;
+using MattsPasswordManager.Models;
 
 namespace MattsPasswordManager.Services
 {

@@ -1,4 +1,5 @@
 using MattsPasswordManager.DTOs;
+using MattsPasswordManager.Models;
 
 internal interface IMainForm
 {

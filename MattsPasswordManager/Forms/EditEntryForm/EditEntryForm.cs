@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MattsPasswordManager.DTOs;
+using MattsPasswordManager.Models;
 using MattsPasswordManager.Validators;
 
 namespace MattsPasswordManager.Forms

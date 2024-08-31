@@ -6,7 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using MattsPasswordManager.DTOs;
+using MattsPasswordManager.Models;
 using MattsPasswordManager.Services;
 
 public class FileServiceTests
