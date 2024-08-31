@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using MattsPasswordManager.DTOs;
@@ -26,6 +27,11 @@ namespace MattsPasswordManager.Models
             Entries.RemoveAt(index);
         }
 
+        public void RemoveEntry(Entry entry)
+        {
+            Entries.Remove(entry);
+        }
+
         public Entry GetEntry(int index)
         {
             return Entries[index];
@@ -34,6 +40,11 @@ namespace MattsPasswordManager.Models
         public void ClearEntries()
         {
             Entries.Clear();
+        }
+
+        public int GetIndex(Entry entry)
+        {
+            return Entries.IndexOf(entry);
         }
     }
 }

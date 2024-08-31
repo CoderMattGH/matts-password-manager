@@ -39,6 +39,8 @@
             changeRepoPassToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             versionToolStripMenuItem = new ToolStripMenuItem();
+            searchBox = new TextBox();
+            searchLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)passwordTable).BeginInit();
             mainMenuStrip.SuspendLayout();
             SuspendLayout();
@@ -51,14 +53,14 @@
             passwordTable.AllowUserToResizeRows = false;
             passwordTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             passwordTable.Columns.AddRange(new DataGridViewColumn[] { Description, Username, Password });
-            passwordTable.Location = new Point(0, 27);
+            passwordTable.Location = new Point(0, 56);
             passwordTable.MultiSelect = false;
             passwordTable.Name = "passwordTable";
             passwordTable.ReadOnly = true;
             passwordTable.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             passwordTable.ScrollBars = ScrollBars.Vertical;
             passwordTable.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            passwordTable.Size = new Size(943, 625);
+            passwordTable.Size = new Size(943, 596);
             passwordTable.TabIndex = 0;
             // 
             // Description
@@ -129,7 +131,7 @@
             // 
             // fileMenuStripItem
             // 
-            fileMenuStripItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, loadToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, new ToolStripSeparator(), exitToolStripMenuItem });
+            fileMenuStripItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, loadToolStripMenuItem, saveToolStripMenuItem, saveAsToolStripMenuItem, exitToolStripMenuItem });
             fileMenuStripItem.Name = "fileMenuStripItem";
             fileMenuStripItem.Size = new Size(37, 20);
             fileMenuStripItem.Text = "&File";
@@ -138,7 +140,7 @@
             // 
             newToolStripMenuItem.Name = "newToolStripMenuItem";
             newToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-            newToolStripMenuItem.Size = new Size(180, 22);
+            newToolStripMenuItem.Size = new Size(141, 22);
             newToolStripMenuItem.Text = "New";
             newToolStripMenuItem.Click += FileNewClickHandler;
             // 
@@ -146,7 +148,7 @@
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             loadToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.L;
-            loadToolStripMenuItem.Size = new Size(180, 22);
+            loadToolStripMenuItem.Size = new Size(141, 22);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += FileLoadClickHandler;
             // 
@@ -154,21 +156,21 @@
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             saveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-            saveToolStripMenuItem.Size = new Size(180, 22);
+            saveToolStripMenuItem.Size = new Size(141, 22);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += FileSaveClickHandler;
             // 
             // saveAsToolStripMenuItem
             // 
             saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            saveAsToolStripMenuItem.Size = new Size(180, 22);
+            saveAsToolStripMenuItem.Size = new Size(141, 22);
             saveAsToolStripMenuItem.Text = "Save As";
             saveAsToolStripMenuItem.Click += FileSaveAsClickHandler;
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(180, 22);
+            exitToolStripMenuItem.Size = new Size(141, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += FileExitClickHandler;
             // 
@@ -196,16 +198,35 @@
             // versionToolStripMenuItem
             // 
             versionToolStripMenuItem.Name = "versionToolStripMenuItem";
-            versionToolStripMenuItem.Size = new Size(112, 22);
+            versionToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F1;
+            versionToolStripMenuItem.Size = new Size(158, 22);
             versionToolStripMenuItem.Text = "Version";
             versionToolStripMenuItem.Click += AboutVersionClickHandler;
-            versionToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.F1;
+            // 
+            // searchBox
+            // 
+            searchBox.Location = new Point(63, 27);
+            searchBox.Name = "searchBox";
+            searchBox.Size = new Size(868, 23);
+            searchBox.TabIndex = 5;
+            searchBox.TextChanged += SearchBoxTypeHandler;
+            // 
+            // searchLabel
+            // 
+            searchLabel.AutoSize = true;
+            searchLabel.Location = new Point(12, 30);
+            searchLabel.Name = "searchLabel";
+            searchLabel.Size = new Size(45, 15);
+            searchLabel.TabIndex = 6;
+            searchLabel.Text = "Search:";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(943, 723);
+            Controls.Add(searchLabel);
+            Controls.Add(searchBox);
             Controls.Add(editButton);
             Controls.Add(removeButton);
             Controls.Add(addButton);
@@ -244,5 +265,7 @@
         private DataGridViewTextBoxColumn Description;
         private DataGridViewTextBoxColumn Username;
         private DataGridViewTextBoxColumn Password;
+        private TextBox searchBox;
+        private Label searchLabel;
     }
 }

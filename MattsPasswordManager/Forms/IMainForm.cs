@@ -9,7 +9,8 @@ internal interface IMainForm
         ActionChangeRepoPasswordClick,
         AddEntryClick,
         EditEntryClick,
-        RemoveEntryClick;
+        RemoveEntryClick,
+        SearchBoxType;
 
     event FormClosingEventHandler? CloseButtonClick;
 
@@ -24,12 +25,13 @@ internal interface IMainForm
     void EditEntryClickhandler(object sender, EventArgs e);
     void RemoveEntryClickHandler(object sender, EventArgs e);
     void AboutVersionClickHandler(object sender, EventArgs e);
+    public void SearchBoxTypeHandler(object sender, EventArgs e);
     DialogResult ShowConfirmationDialog(string message);
     void ShowErrorDialog(string message);
     string? ShowSaveFileDialog();
     string? ShowOpenFileDialog();
     DialogResult ShowAddEntryForm(Entry entry, List<Entry> entries);
-    DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries, int rowIndex);
+    DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries);
     DialogResult ShowEditEncPasswordForm(EncPassword encPassword);
     DialogResult ShowAddEncPasswordForm(EncPassword encPassword);
     DialogResult ShowEnterEncPasswordForm(EncPassword encPassword);
@@ -39,4 +41,5 @@ internal interface IMainForm
     void ClearTable();
     void SetTable(List<Entry> entries);
     void UpdateFilename(string filename);
+    string GetSearchBoxText();
 }

@@ -32,6 +32,7 @@ namespace MattsPasswordManager.Presenters
             _mainForm.AddEntryClick += AddEntry;
             _mainForm.EditEntryClick += EditEntry;
             _mainForm.RemoveEntryClick += RemoveEntry;
+            _mainForm.SearchBoxType += FilterSearchResults;
         }
 
         public void NewRepo(object? sender, EventArgs e)
@@ -152,8 +153,9 @@ namespace MattsPasswordManager.Presenters
             }
 
             _mainModel.AddEntry(entry);
-            _mainForm.SetTable(_mainModel.Entries);
             _mainModel.IsModified = true;
+
+            FilterSearchResults();
         }
 
         public void EditEntry(object? sender, EventArgs e)
@@ -167,23 +169,18 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            int rowIndex = row.Index;
-            Entry rowEntry = _mainModel.GetEntry(rowIndex);
-
-            string description = rowEntry.Description ?? "";
-            string username = rowEntry.Username ?? "";
-            string password = rowEntry.Password ?? "";
+            Entry? rowEntry = row.Tag as Entry;
 
             List<Entry> entries = _mainModel.Entries;
 
-            DialogResult result = _mainForm.ShowEditEntryForm(rowEntry, entries, rowIndex);
+            DialogResult result = _mainForm.ShowEditEntryForm(rowEntry, entries);
 
             if (result != DialogResult.OK)
             {
                 return;
             }
 
-            _mainForm.SetTable(_mainModel.Entries);
+            FilterSearchResults();
 
             _mainModel.IsModified = true;
         }
@@ -204,12 +201,36 @@ namespace MattsPasswordManager.Presenters
                 "Are you sure you want to remove this entry?"
             );
 
+            Entry? rowEntry = row.Tag as Entry;
+
             if (result == DialogResult.Yes)
             {
-                _mainModel.RemoveEntry(row.Index);
-                _mainForm.SetTable(_mainModel.Entries);
+                _mainModel.RemoveEntry(rowEntry);
                 _mainModel.IsModified = true;
+
+                FilterSearchResults();
             }
+        }
+
+        public void FilterSearchResults(object? sender, EventArgs e)
+        {
+            FilterSearchResults();
+        }
+
+        public void FilterSearchResults()
+        {
+            // Get text from search box
+            string searchString = _mainForm.GetSearchBoxText();
+
+            // Filter results
+            List<Entry> filteredEntries = _mainModel
+                .Entries.Where(e =>
+                    e.Description != null
+                    && e.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase)
+                )
+                .ToList();
+
+            _mainForm.SetTable(filteredEntries);
         }
 
         private bool CloseAppPrep()

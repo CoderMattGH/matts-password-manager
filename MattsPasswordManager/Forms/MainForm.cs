@@ -16,7 +16,8 @@ namespace MattsPasswordManager.Forms
             ActionChangeRepoPasswordClick,
             AddEntryClick,
             EditEntryClick,
-            RemoveEntryClick;
+            RemoveEntryClick,
+            SearchBoxType;
 
         public event FormClosingEventHandler? CloseButtonClick;
 
@@ -81,6 +82,11 @@ namespace MattsPasswordManager.Forms
             new VersionForm().ShowDialog();
         }
 
+        public void SearchBoxTypeHandler(object sender, EventArgs e)
+        {
+            SearchBoxType?.Invoke(this, EventArgs.Empty);
+        }
+
         public DialogResult ShowConfirmationDialog(string message)
         {
             DialogResult result = MessageBox.Show(
@@ -140,9 +146,9 @@ namespace MattsPasswordManager.Forms
             return addEntryForm.ShowDialog();
         }
 
-        public DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries, int rowIndex)
+        public DialogResult ShowEditEntryForm(Entry entry, List<Entry> entries)
         {
-            EditEntryForm editEntryForm = new(entry, entries, rowIndex);
+            EditEntryForm editEntryForm = new(entry, entries);
 
             return editEntryForm.ShowDialog();
         }
@@ -175,7 +181,12 @@ namespace MattsPasswordManager.Forms
 
         public void AddEntryToTable(Entry entry)
         {
-            passwordTable.Rows.Add(entry.Description, entry.Username, entry.Password);
+            int rowIndex = passwordTable.Rows.Add(
+                entry.Description,
+                entry.Username,
+                entry.Password
+            );
+            passwordTable.Rows[rowIndex].Tag = entry;
         }
 
         public void RemoveEntryInTable(int index)
@@ -208,6 +219,11 @@ namespace MattsPasswordManager.Forms
             }
 
             this.Text = title;
+        }
+
+        public string GetSearchBoxText()
+        {
+            return searchBox.Text;
         }
     }
 }
