@@ -61,8 +61,9 @@ namespace MattsPasswordManager.Presenters
             _mainModel.IsModified = false;
             _mainModel.EncPassword = "";
             _mainModel.ClearEntries();
-            _mainForm.UpdateFilename("");
 
+            _mainForm.UpdateFilename("");
+            _mainForm.SetSearchBoxText("");
             _mainForm.SetTable(_mainModel.Entries);
         }
 

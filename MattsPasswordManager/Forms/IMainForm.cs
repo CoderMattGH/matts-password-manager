@@ -42,4 +42,5 @@ internal interface IMainForm
     void SetTable(List<Entry> entries);
     void UpdateFilename(string filename);
     string GetSearchBoxText();
+    void SetSearchBoxText(string text);
 }

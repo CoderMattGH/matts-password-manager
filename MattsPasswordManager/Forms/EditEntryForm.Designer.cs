@@ -67,6 +67,7 @@
             // 
             // descriptionTextBox
             // 
+            descriptionTextBox.BorderStyle = BorderStyle.FixedSingle;
             descriptionTextBox.Location = new Point(99, 12);
             descriptionTextBox.Name = "descriptionTextBox";
             descriptionTextBox.Size = new Size(340, 23);
@@ -74,6 +75,7 @@
             // 
             // usernameTextBox
             // 
+            usernameTextBox.BorderStyle = BorderStyle.FixedSingle;
             usernameTextBox.Location = new Point(99, 51);
             usernameTextBox.Name = "usernameTextBox";
             usernameTextBox.Size = new Size(340, 23);
@@ -81,6 +83,7 @@
             // 
             // passwordTextBox
             // 
+            passwordTextBox.BorderStyle = BorderStyle.FixedSingle;
             passwordTextBox.Location = new Point(99, 93);
             passwordTextBox.Name = "passwordTextBox";
             passwordTextBox.Size = new Size(340, 23);
@@ -110,6 +113,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Window;
             ClientSize = new Size(460, 195);
             Controls.Add(cancelButton);
             Controls.Add(okButton);

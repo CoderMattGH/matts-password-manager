@@ -225,5 +225,10 @@ namespace MattsPasswordManager.Forms
         {
             return searchBox.Text;
         }
+
+        public void SetSearchBoxText(string text)
+        {
+            searchBox.Text = text;
+        }
     }
 }
