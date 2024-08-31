@@ -59,9 +59,10 @@ namespace MattsPasswordManager.Presenters
             _mainModel.OpenFilePath = "";
             _mainModel.IsModified = false;
             _mainModel.EncPassword = "";
+            _mainModel.ClearEntries();
             _mainForm.UpdateFilename("");
 
-            _mainForm.ClearTable();
+            _mainForm.SetTable(_mainModel.Entries);
         }
 
         public void LoadRepo(object? sender, EventArgs e)
@@ -94,13 +95,10 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            // Clear the table
-            _mainForm.ClearTable();
+            _mainModel.ClearEntries();
 
-            foreach (Entry entry in data)
-            {
-                _mainForm.AddEntryToTable(entry);
-            }
+            _mainModel.Entries = data;
+            _mainForm.SetTable(data);
 
             _mainModel.IsModified = false;
             _mainModel.EncPassword = encPassword.Password;
@@ -145,8 +143,7 @@ namespace MattsPasswordManager.Presenters
         {
             Entry entry = new();
 
-            List<Entry> entries = _mainForm.GetTableEntries();
-
+            List<Entry> entries = _mainModel.Entries;
             DialogResult result = _mainForm.ShowAddEntryForm(entry, entries);
 
             if (result != DialogResult.OK)
@@ -154,7 +151,8 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            _mainForm.AddEntryToTable(entry);
+            _mainModel.AddEntry(entry);
+            _mainForm.SetTable(_mainModel.Entries);
             _mainModel.IsModified = true;
         }
 
@@ -169,31 +167,23 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            string description = row.Cells[0].Value.ToString() ?? "";
-            string username = row.Cells[1].Value.ToString() ?? "";
-            string password = row.Cells[2].Value.ToString() ?? "";
+            int rowIndex = row.Index;
+            Entry rowEntry = _mainModel.GetEntry(rowIndex);
 
-            Entry entry =
-                new()
-                {
-                    Description = description,
-                    Username = username,
-                    Password = password
-                };
+            string description = rowEntry.Description ?? "";
+            string username = rowEntry.Username ?? "";
+            string password = rowEntry.Password ?? "";
 
-            List<Entry> entries = _mainForm.GetTableEntries();
+            List<Entry> entries = _mainModel.Entries;
 
-            DialogResult result = _mainForm.ShowEditEntryForm(entry, entries, row.Index);
+            DialogResult result = _mainForm.ShowEditEntryForm(rowEntry, entries, rowIndex);
 
             if (result != DialogResult.OK)
             {
                 return;
             }
 
-            // Update row
-            row.Cells[0].Value = entry.Description;
-            row.Cells[1].Value = entry.Username;
-            row.Cells[2].Value = entry.Password;
+            _mainForm.SetTable(_mainModel.Entries);
 
             _mainModel.IsModified = true;
         }
@@ -216,7 +206,8 @@ namespace MattsPasswordManager.Presenters
 
             if (result == DialogResult.Yes)
             {
-                _mainForm.RemoveEntryInTable(row.Index);
+                _mainModel.RemoveEntry(row.Index);
+                _mainForm.SetTable(_mainModel.Entries);
                 _mainModel.IsModified = true;
             }
         }
@@ -269,7 +260,7 @@ namespace MattsPasswordManager.Presenters
                 _mainModel.EncPassword = encPassword.Password;
             }
 
-            List<Entry> entries = _mainForm.GetTableEntries();
+            List<Entry> entries = _mainModel.Entries;
 
             string? filePath = null;
             if (_mainModel.OpenFilePath == "" || forceSaveToNewFile)

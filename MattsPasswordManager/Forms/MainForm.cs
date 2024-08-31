@@ -168,33 +168,6 @@ namespace MattsPasswordManager.Forms
             return enterPasswordForm.ShowDialog();
         }
 
-        public List<Entry> GetTableEntries()
-        {
-            // Convert all the table entrys to Entry objects
-            List<Entry> entries = [];
-
-            for (int i = 0; i < passwordTable.Rows.Count; i++)
-            {
-                DataGridViewRow row = passwordTable.Rows[i];
-
-                string description = row.Cells[0].Value.ToString() ?? "";
-                string username = row.Cells[1].Value.ToString() ?? "";
-                string password = row.Cells[2].Value.ToString() ?? "";
-
-                Entry entry =
-                    new()
-                    {
-                        Description = description,
-                        Username = username,
-                        Password = password
-                    };
-
-                entries.Add(entry);
-            }
-
-            return entries;
-        }
-
         public DataGridViewRow GetSelectedRow()
         {
             return passwordTable.CurrentRow;
@@ -208,6 +181,16 @@ namespace MattsPasswordManager.Forms
         public void RemoveEntryInTable(int index)
         {
             passwordTable.Rows.RemoveAt(index);
+        }
+
+        public void SetTable(List<Entry> entries)
+        {
+            ClearTable();
+
+            foreach (Entry entry in entries)
+            {
+                AddEntryToTable(entry);
+            }
         }
 
         public void ClearTable()

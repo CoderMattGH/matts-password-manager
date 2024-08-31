@@ -33,10 +33,10 @@ internal interface IMainForm
     DialogResult ShowEditEncPasswordForm(EncPassword encPassword);
     DialogResult ShowAddEncPasswordForm(EncPassword encPassword);
     DialogResult ShowEnterEncPasswordForm(EncPassword encPassword);
-    List<Entry> GetTableEntries();
     DataGridViewRow GetSelectedRow();
     void AddEntryToTable(Entry entry);
     void RemoveEntryInTable(int index);
     void ClearTable();
+    void SetTable(List<Entry> entries);
     void UpdateFilename(string filename);
 }
