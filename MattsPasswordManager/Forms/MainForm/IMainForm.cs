@@ -48,4 +48,5 @@ internal interface IMainForm
     void UpdateFilename(string filename);
     string GetSearchBoxText();
     void SetSearchBoxText(string text);
+    void Close();
 }

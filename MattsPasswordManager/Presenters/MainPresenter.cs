@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,6 +19,8 @@ namespace MattsPasswordManager.Presenters
         private readonly IMainForm _mainForm;
         private readonly FileService _fileService;
         private readonly MainModel _mainModel;
+
+        private readonly SynchronizedCollection<Task> _backgroundTasks = new(new List<Task>());
 
         public MainPresenter(IMainForm mainForm, MainModel mainModel, FileService fileService)
         {
@@ -46,7 +50,7 @@ namespace MattsPasswordManager.Presenters
 
                 if (result == DialogResult.Yes)
                 {
-                    if (!ProcessSaveRepo())
+                    if (!SaveAndPrepareRepo())
                     {
                         return;
                     }
@@ -88,61 +92,71 @@ namespace MattsPasswordManager.Presenters
 
             _mainForm.ShowProgBarForm();
 
-            List<Entry> data = [];
-            Task.Run(() =>
+            Task task = Task.Run(() =>
             {
                 try
                 {
-                    data = _fileService.LoadPasswordFile(filePath, encPassword.Password);
+                    List<Entry> data = _fileService.LoadPasswordFile(
+                        filePath,
+                        encPassword.Password
+                    );
+
+                    _mainForm.UpdateProgBarForm(50);
+
+                    _mainModel.ClearEntries();
+
+                    _mainModel.Entries = data;
+                    _mainForm.SetTable(data);
+
+                    _mainModel.IsModified = false;
+                    _mainModel.EncPassword = encPassword.Password;
+                    _mainModel.OpenFilePath = filePath;
+                    _mainForm.UpdateFilename(Path.GetFileName(filePath));
                 }
                 catch (Exception ex)
                 {
+                    _mainForm.ShowErrorDialog(ex.Message);
+                }
+                finally
+                {
                     _mainForm.UpdateProgBarForm(100);
                     _mainForm.HideProgBarForm();
-
-                    _mainForm.ShowErrorDialog(ex.Message);
-
-                    return;
                 }
-
-                _mainForm.UpdateProgBarForm(50);
-
-                _mainModel.ClearEntries();
-
-                _mainModel.Entries = data;
-                _mainForm.SetTable(data);
-
-                _mainModel.IsModified = false;
-                _mainModel.EncPassword = encPassword.Password;
-                _mainModel.OpenFilePath = filePath;
-                _mainForm.UpdateFilename(Path.GetFileName(filePath));
-
-                _mainForm.UpdateProgBarForm(100);
-                _mainForm.HideProgBarForm();
             });
+
+            _backgroundTasks.Add(task);
         }
 
         public void SaveRepo(object? sender, EventArgs e)
         {
-            Task.Run(() =>
-            {
-                ProcessSaveRepo(false);
-            });
+            SaveAndPrepareRepo(false);
         }
 
         public void SaveAsRepo(object? sender, EventArgs e)
         {
-            Task.Run(() =>
-            {
-                ProcessSaveRepo(true);
-            });
+            SaveAndPrepareRepo(true);
         }
 
         public void ProcessCloseApp(object? sender, FormClosingEventArgs e)
         {
-            if (!CloseAppPrep() && e != null)
+            if (!CloseAppPrep())
             {
                 e.Cancel = true;
+
+                return;
+            }
+
+            // Wait for all background tasks to complete
+            if (_backgroundTasks.Any(t => !t.IsCompleted))
+            {
+                e.Cancel = true;
+
+                Task.Run(() =>
+                {
+                    Task.WaitAll(_backgroundTasks.ToArray());
+
+                    Application.Exit();
+                });
             }
         }
 
@@ -283,17 +297,8 @@ namespace MattsPasswordManager.Presenters
 
                 if (result == DialogResult.Yes)
                 {
-                    try
+                    if (!SaveAndPrepareRepo())
                     {
-                        if (!ProcessSaveRepo())
-                        {
-                            return false;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _mainForm.ShowErrorDialog(ex.Message);
-
                         return false;
                     }
                 }
@@ -302,8 +307,9 @@ namespace MattsPasswordManager.Presenters
             return true;
         }
 
-        private bool ProcessSaveRepo(bool forceSaveToNewFile = false)
+        private bool SaveAndPrepareRepo(bool forceSaveToNewFile = false)
         {
+            // If password is empty, prompt user for password
             if (_mainModel.EncPassword == "")
             {
                 EncPassword encPassword = new();
@@ -318,6 +324,7 @@ namespace MattsPasswordManager.Presenters
 
             List<Entry> entries = _mainModel.Entries;
 
+            // If open filepath is empty, prompt user for filepath
             string? filePath = null;
             if (_mainModel.OpenFilePath == "" || forceSaveToNewFile)
             {
@@ -329,6 +336,22 @@ namespace MattsPasswordManager.Presenters
                 }
             }
 
+            Task task = Task.Run(() =>
+            {
+                SaveRepo(filePath);
+            });
+
+            _backgroundTasks.Add(task);
+
+            return true;
+        }
+
+        private void SaveRepo(string? filePath)
+        {
+            _mainForm.ShowProgBarForm();
+
+            List<Entry> entries = _mainModel.Entries;
+
             try
             {
                 _fileService.SavePasswordFile(
@@ -336,23 +359,26 @@ namespace MattsPasswordManager.Presenters
                     entries,
                     _mainModel.EncPassword
                 );
+
+                _mainForm.UpdateProgBarForm(50);
+
+                _mainModel.IsModified = false;
+
+                if (filePath != null)
+                {
+                    _mainModel.OpenFilePath = filePath;
+                    _mainForm.UpdateFilename(Path.GetFileName(filePath));
+                }
             }
             catch (Exception)
             {
                 _mainForm.ShowErrorDialog("Error saving file!");
-
-                return false;
             }
-
-            _mainModel.IsModified = false;
-
-            if (filePath != null)
+            finally
             {
-                _mainModel.OpenFilePath = filePath;
-                _mainForm.UpdateFilename(Path.GetFileName(filePath));
+                _mainForm.UpdateProgBarForm(100);
+                _mainForm.HideProgBarForm();
             }
-
-            return true;
         }
     }
 }
