@@ -1,4 +1,5 @@
 using MattsPasswordManager.DTOs;
+using MattsPasswordManager.Forms;
 using MattsPasswordManager.Models;
 
 internal interface IMainForm
@@ -36,6 +37,9 @@ internal interface IMainForm
     DialogResult ShowEditEncPasswordForm(EncPassword encPassword);
     DialogResult ShowAddEncPasswordForm(EncPassword encPassword);
     DialogResult ShowEnterEncPasswordForm(EncPassword encPassword);
+    void ShowProgBarForm();
+    void HideProgBarForm();
+    void UpdateProgBarForm(int percentage);
     DataGridViewRow GetSelectedRow();
     void AddEntryToTable(Entry entry);
     void RemoveEntryInTable(int index);

@@ -22,6 +22,8 @@ namespace MattsPasswordManager.Forms
 
         public event FormClosingEventHandler? CloseButtonClick;
 
+        private ProgBarForm? _progBarForm;
+
         public MainForm()
         {
             this.Icon = new Icon("MPM.ico");
@@ -175,6 +177,43 @@ namespace MattsPasswordManager.Forms
             return enterPasswordForm.ShowDialog();
         }
 
+        public void ShowProgBarForm()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(ShowProgBarForm));
+            }
+            else
+            {
+                this.Enabled = false;
+                this._progBarForm = new();
+                this._progBarForm.SetProgressPercentage(0);
+                this._progBarForm.Show();
+            }
+        }
+
+        public void HideProgBarForm()
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(HideProgBarForm));
+            }
+            else
+            {
+                if (this._progBarForm != null)
+                {
+                    this.Enabled = true;
+                    this._progBarForm.CloseForm();
+                    this._progBarForm = null;
+                }
+            }
+        }
+
+        public void UpdateProgBarForm(int percentage)
+        {
+            this._progBarForm?.SetProgressPercentage(percentage);
+        }
+
         public DataGridViewRow GetSelectedRow()
         {
             return passwordTable.CurrentRow;
@@ -197,11 +236,18 @@ namespace MattsPasswordManager.Forms
 
         public void SetTable(List<Entry> entries)
         {
-            ClearTable();
-
-            foreach (Entry entry in entries)
+            if (this.InvokeRequired)
             {
-                AddEntryToTable(entry);
+                this.Invoke(new Action<List<Entry>>(SetTable), entries);
+            }
+            else
+            {
+                ClearTable();
+
+                foreach (Entry entry in entries)
+                {
+                    AddEntryToTable(entry);
+                }
             }
         }
 
@@ -212,14 +258,21 @@ namespace MattsPasswordManager.Forms
 
         public void UpdateFilename(string filename)
         {
-            string title = "Matts Password Manager";
-
-            if (filename != "")
+            if (this.InvokeRequired)
             {
-                title += $" [{filename}]";
+                this.Invoke(new Action<string>(UpdateFilename), filename);
             }
+            else
+            {
+                string title = "Matts Password Manager";
 
-            this.Text = title;
+                if (filename != "")
+                {
+                    title += $" [{filename}]";
+                }
+
+                this.Text = title;
+            }
         }
 
         public string GetSearchBoxText()

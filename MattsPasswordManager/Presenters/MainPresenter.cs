@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -85,37 +86,56 @@ namespace MattsPasswordManager.Presenters
                 return;
             }
 
-            List<Entry> data;
-            try
+            _mainForm.ShowProgBarForm();
+
+            List<Entry> data = [];
+            Task.Run(() =>
             {
-                data = _fileService.LoadPasswordFile(filePath, encPassword.Password);
-            }
-            catch (Exception ex)
-            {
-                _mainForm.ShowErrorDialog(ex.Message);
+                try
+                {
+                    data = _fileService.LoadPasswordFile(filePath, encPassword.Password);
+                }
+                catch (Exception ex)
+                {
+                    _mainForm.UpdateProgBarForm(100);
+                    _mainForm.HideProgBarForm();
 
-                return;
-            }
+                    _mainForm.ShowErrorDialog(ex.Message);
 
-            _mainModel.ClearEntries();
+                    return;
+                }
 
-            _mainModel.Entries = data;
-            _mainForm.SetTable(data);
+                _mainForm.UpdateProgBarForm(50);
 
-            _mainModel.IsModified = false;
-            _mainModel.EncPassword = encPassword.Password;
-            _mainModel.OpenFilePath = filePath;
-            _mainForm.UpdateFilename(Path.GetFileName(filePath));
+                _mainModel.ClearEntries();
+
+                _mainModel.Entries = data;
+                _mainForm.SetTable(data);
+
+                _mainModel.IsModified = false;
+                _mainModel.EncPassword = encPassword.Password;
+                _mainModel.OpenFilePath = filePath;
+                _mainForm.UpdateFilename(Path.GetFileName(filePath));
+
+                _mainForm.UpdateProgBarForm(100);
+                _mainForm.HideProgBarForm();
+            });
         }
 
         public void SaveRepo(object? sender, EventArgs e)
         {
-            ProcessSaveRepo(false);
+            Task.Run(() =>
+            {
+                ProcessSaveRepo(false);
+            });
         }
 
         public void SaveAsRepo(object? sender, EventArgs e)
         {
-            ProcessSaveRepo(true);
+            Task.Run(() =>
+            {
+                ProcessSaveRepo(true);
+            });
         }
 
         public void ProcessCloseApp(object? sender, FormClosingEventArgs e)
